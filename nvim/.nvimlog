@@ -1,0 +1,2 @@
+WRN 2026-06-15T15:00:18.577 c/nvim.279421.0 server_start:199: Failed to start server: operation not permitted: /run/user/1000/nvim.2.0
+WRN 2026-06-15T15:00:18.621 c/nvim.279421.0 server_start:199: Failed to start server: operation not permitted: /run/user/1000/nvim.2.1
