@@ -272,7 +272,7 @@ if not vim.g.vscode then
 		noremap = true,
 		silent = true,
 	})
-	local function run_make_smoke_in_float()
+	local function run_cmd_in_float(cmd, title)
 		local width = math.floor(vim.o.columns * 0.9)
 		local height = math.floor(vim.o.lines * 0.85)
 		local col = math.floor((vim.o.columns - width) / 2)
@@ -287,57 +287,56 @@ if not vim.g.vscode then
 			row = row,
 			style = "minimal",
 			border = "rounded",
-			title = " make smoke ",
+			title = " " .. title .. " ",
 			title_pos = "center",
 		})
 
-		vim.fn.termopen("make smoke")
+		vim.fn.termopen(cmd)
 		vim.cmd("startinsert")
 
 		vim.keymap.set("n", "q", function()
 			if vim.api.nvim_win_is_valid(win) then
 				vim.api.nvim_win_close(win, true)
 			end
-		end, { buffer = buf, silent = true, nowait = true, desc = "Close make smoke window" })
+		end, { buffer = buf, silent = true, nowait = true, desc = "Close " .. title .. " window" })
 	end
 
-	vim.keymap.set("n", "<leader>ms", run_make_smoke_in_float, {
+	vim.keymap.set("n", "<leader>ms", function()
+		run_cmd_in_float("make smoke", "make smoke")
+	end, {
 		desc = "Run make smoke in floating terminal",
 		noremap = true,
 		silent = true,
 	})
 
-	local function run_pytest_in_float()
-		local width = math.floor(vim.o.columns * 0.9)
-		local height = math.floor(vim.o.lines * 0.85)
-		local col = math.floor((vim.o.columns - width) / 2)
-		local row = math.floor((vim.o.lines - height) / 2)
-
-		local buf = vim.api.nvim_create_buf(false, true)
-		local win = vim.api.nvim_open_win(buf, true, {
-			relative = "editor",
-			width = width,
-			height = height,
-			col = col,
-			row = row,
-			style = "minimal",
-			border = "rounded",
-			title = " pytest ",
-			title_pos = "center",
-		})
-
-		vim.fn.termopen("uv run pytest")
-		vim.cmd("startinsert")
-
-		vim.keymap.set("n", "q", function()
-			if vim.api.nvim_win_is_valid(win) then
-				vim.api.nvim_win_close(win, true)
-			end
-		end, { buffer = buf, silent = true, nowait = true, desc = "Close pytest window" })
-	end
-
-	vim.keymap.set("n", "<leader>tt", run_pytest_in_float, {
+	vim.keymap.set("n", "<leader>tt", function()
+		run_cmd_in_float("uv run pytest", "pytest")
+	end, {
 		desc = "Run pytest in floating terminal",
+		noremap = true,
+		silent = true,
+	})
+
+	vim.keymap.set("n", "<leader>mr", function()
+		run_cmd_in_float("make run", "make run")
+	end, {
+		desc = "Run make run in floating terminal",
+		noremap = true,
+		silent = true,
+	})
+
+	vim.keymap.set("n", "<leader>md", function()
+		run_cmd_in_float("make debug", "make debug")
+	end, {
+		desc = "Run make debug in floating terminal",
+		noremap = true,
+		silent = true,
+	})
+
+	vim.keymap.set("n", "<leader>mt", function()
+		run_cmd_in_float("make test", "make test")
+	end, {
+		desc = "Run make test in floating terminal",
 		noremap = true,
 		silent = true,
 	})
