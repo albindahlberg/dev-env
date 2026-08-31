@@ -341,6 +341,48 @@ if not vim.g.vscode then
 		silent = true,
 	})
 
+	vim.keymap.set("n", "<leader>mp", "<cmd>MarkdownPreview<CR>", { desc = "Markdown preview" })
+
+	vim.keymap.set("n", "<leader>jc", function()
+		run_cmd_in_float("just check", "just check")
+	end, {
+		desc = "Run just check in floating terminal",
+		noremap = true,
+		silent = true,
+	})
+
+	vim.keymap.set("n", "<leader>js", function()
+		run_cmd_in_float("just smoke", "just smoke")
+	end, {
+		desc = "Run just smoke in floating terminal",
+		noremap = true,
+		silent = true,
+	})
+
+	vim.keymap.set("n", "<leader>jr", function()
+		run_cmd_in_float("just run", "just run")
+	end, {
+		desc = "Run just run in floating terminal",
+		noremap = true,
+		silent = true,
+	})
+
+	vim.keymap.set("n", "<leader>jd", function()
+		run_cmd_in_float("just debug", "just debug")
+	end, {
+		desc = "Run just debug in floating terminal",
+		noremap = true,
+		silent = true,
+	})
+
+	vim.keymap.set("n", "<leader>jt", function()
+		run_cmd_in_float("just test", "just test")
+	end, {
+		desc = "Run just test in floating terminal",
+		noremap = true,
+		silent = true,
+	})
+
 	-- global typos (apply everywhere)
 	vim.cmd("iabbrev teh the")
 	vim.cmd("iabbrev lenght length")

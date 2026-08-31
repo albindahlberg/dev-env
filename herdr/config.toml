@@ -1,0 +1,89 @@
+onboarding = false
+
+[worktrees]
+directory = "~/.herdr/worktrees"
+
+[keys]
+prefix = "alt+a"
+
+navigate_workspace_up = "k"
+navigate_workspace_down = "j"
+
+focus_pane_left = "alt+h"
+focus_pane_down = "alt+j"
+focus_pane_up = "alt+k"
+focus_pane_right = "alt+l"
+
+goto = ["prefix+g", "prefix+a"]
+
+split_vertical = "prefix+|"
+copy_mode = "prefix+v"
+
+[[keys.command]]
+key = "prefix+alt+c"
+type = "popup"
+command = "just check"
+description = "just check"
+width = "80%"
+height = "80%"
+
+[[keys.command]]
+key = "prefix+alt+s"
+type = "popup"
+command = "just smoke"
+description = "just smoke"
+width = "80%"
+height = "80%"
+
+[[keys.command]]
+key = "prefix+alt+r"
+type = "popup"
+command = "just run"
+description = "just run"
+width = "80%"
+height = "80%"
+
+[[keys.command]]
+key = "prefix+alt+d"
+type = "popup"
+command = "just debug"
+description = "just debug"
+width = "80%"
+height = "80%"
+
+[[keys.command]]
+key = "prefix+alt+t"
+type = "popup"
+command = "just test"
+description = "just test"
+width = "80%"
+height = "80%"
+
+[[keys.command]]
+key = "prefix+j"
+type = "popup"
+command = "just --chooser \"fzf --bind=j:down,k:up,q:abort\" --choose || read -p 'press enter to close' _"
+description = "pick just recipe"
+width = "80%"
+height = "80%"
+
+[[keys.command]]
+key = "prefix+l"
+type = "popup"
+command = "lazygit"
+description = "run lazygit"
+width = "95%"
+height = "95%"
+
+[ui]
+mouse_capture = false
+host_cursor = "native"
+
+show_agent_labels_on_pane_borders = true
+
+[theme]
+name = "vesper"
+auto_switch = false
+
+[ui.toast]
+delivery = "herdr"

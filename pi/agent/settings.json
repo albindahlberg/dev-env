@@ -1,0 +1,13 @@
+{
+  "lastChangelogVersion": "0.84.4",
+  "theme": "dark",
+  "defaultProvider": "anthropic",
+  "defaultModel": "claude-fable-5",
+  "subagents": {
+    "defaultModel": "claude-fable-5"
+  },
+  "packages": [
+    "npm:pi-subagents",
+    "git:github.com/DietrichGebert/ponytail"
+  ]
+}
