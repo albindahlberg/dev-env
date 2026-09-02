@@ -15,6 +15,7 @@ focus_pane_up = "alt+k"
 focus_pane_right = "alt+l"
 
 goto = ["prefix+g", "prefix+a"]
+open_worktree = "prefix+shift+a"
 
 split_vertical = "prefix+|"
 copy_mode = "prefix+v"
