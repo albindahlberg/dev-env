@@ -14,11 +14,22 @@ focus_pane_down = "alt+j"
 focus_pane_up = "alt+k"
 focus_pane_right = "alt+l"
 
-goto = ["prefix+g", "prefix+a"]
+goto = "prefix+g"
 open_worktree = "prefix+shift+a"
+
+previous_agent = "prefix+shift+k"
+next_agent = "prefix+shift+j"
 
 split_vertical = "prefix+|"
 copy_mode = "prefix+v"
+
+[[keys.command]]
+key = "prefix+a"
+type = "popup"
+command = "/home/albindahlberg/albindahlberg/dev-env/herdr/agent-nav.sh"
+description = "navigate agents"
+width = "70%"
+height = "50%"
 
 [[keys.command]]
 key = "prefix+alt+c"
