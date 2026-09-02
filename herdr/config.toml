@@ -62,7 +62,7 @@ height = "80%"
 [[keys.command]]
 key = "prefix+j"
 type = "popup"
-command = "just --chooser \"fzf --bind=j:down,k:up,q:abort\" --choose || read -p 'press enter to close' _"
+command = "just --chooser \"fzf -1 --bind=j:down,k:up,q:abort,one:accept\" --choose || read -p 'press enter to close' _"
 description = "pick just recipe"
 width = "80%"
 height = "80%"
