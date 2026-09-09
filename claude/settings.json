@@ -1,5 +1,7 @@
 {
   "env": {
+    "EDITOR": "nvim",
+    "VISUAL": "nvim",
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
   },
   "permissions": {
@@ -25,7 +27,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash '/home/albindahlberg/.claude/hooks/herdr-agent-state.sh' session",
+            "command": "bash ~/.claude/hooks/herdr-agent-state.sh session",
             "timeout": 10
           }
         ]
@@ -37,14 +39,9 @@
     "command": "~/.claude/scripts/statusline.sh"
   },
   "enabledPlugins": {
-    "caveman@caveman": true,
-    "frontend-design@claude-plugins-official": true,
-    "lua-lsp@claude-plugins-official": true,
-    "ponytail@ponytail": true,
-    "rust-analyzer-lsp@claude-plugins-official": true,
-    "skill-creator@claude-plugins-official": true,
-    "context7@claude-plugins-official": true,
-    "mattpocock-skills@claude-plugins-official": true
+    "mattpocock-skills@claude-plugins-official": false,
+    "caveman@caveman": false,
+    "ponytail@ponytail": false
   },
   "extraKnownMarketplaces": {
     "caveman": {
