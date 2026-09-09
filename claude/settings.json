@@ -1,0 +1,68 @@
+{
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
+  "permissions": {
+    "defaultMode": "auto"
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "$ARGUMENTS is a git commit tool call. Extract the commit message from -m/-F flags or a heredoc. If there is no inline message (interactive editor commit), or the command is --amend with no new message, respond ok:true. Otherwise respond ok:true only if the subject line is Conventional Commits format: `type(scope)?: description` with type one of feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert, subject <=50 chars, imperative mood, no trailing period, lowercase description. If it fails, respond ok:false with a reason containing a corrected subject line and preserving any existing body.",
+            "if": "Bash(git commit*)",
+            "continueOnBlock": true
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash '/home/albindahlberg/.claude/hooks/herdr-agent-state.sh' session",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "~/.claude/scripts/statusline.sh"
+  },
+  "enabledPlugins": {
+    "caveman@caveman": true,
+    "frontend-design@claude-plugins-official": true,
+    "lua-lsp@claude-plugins-official": true,
+    "ponytail@ponytail": true,
+    "rust-analyzer-lsp@claude-plugins-official": true,
+    "skill-creator@claude-plugins-official": true,
+    "context7@claude-plugins-official": true,
+    "mattpocock-skills@claude-plugins-official": true
+  },
+  "extraKnownMarketplaces": {
+    "caveman": {
+      "source": {
+        "source": "github",
+        "repo": "JuliusBrussee/caveman"
+      }
+    },
+    "ponytail": {
+      "source": {
+        "source": "github",
+        "repo": "DietrichGebert/ponytail"
+      }
+    }
+  },
+  "tui": "default",
+  "theme": "dark",
+  "editorMode": "vim",
+  "teammateMode": "tmux",
+  "autoMemoryEnabled": false
+}
