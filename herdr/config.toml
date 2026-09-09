@@ -26,7 +26,7 @@ copy_mode = "prefix+v"
 [[keys.command]]
 key = "prefix+a"
 type = "popup"
-command = "/home/albindahlberg/albindahlberg/dev-env/herdr/agent-nav.sh"
+command = '$(dirname "$(readlink ~/.config/herdr/config.toml)")/agent-nav.sh'
 description = "navigate agents"
 width = "70%"
 height = "50%"
