@@ -34,7 +34,7 @@ height = "50%"
 [[keys.command]]
 key = "prefix+alt+c"
 type = "popup"
-command = "just check"
+command = 'PATH="$HOME/.cargo/bin:$PATH" just check'
 description = "just check"
 width = "80%"
 height = "80%"
@@ -42,7 +42,7 @@ height = "80%"
 [[keys.command]]
 key = "prefix+alt+s"
 type = "popup"
-command = "just smoke"
+command = 'PATH="$HOME/.cargo/bin:$PATH" just smoke'
 description = "just smoke"
 width = "80%"
 height = "80%"
@@ -50,7 +50,7 @@ height = "80%"
 [[keys.command]]
 key = "prefix+alt+r"
 type = "popup"
-command = "just run"
+command = 'PATH="$HOME/.cargo/bin:$PATH" just run'
 description = "just run"
 width = "80%"
 height = "80%"
@@ -58,7 +58,7 @@ height = "80%"
 [[keys.command]]
 key = "prefix+alt+d"
 type = "popup"
-command = "just debug"
+command = 'PATH="$HOME/.cargo/bin:$PATH" just debug'
 description = "just debug"
 width = "80%"
 height = "80%"
@@ -66,7 +66,7 @@ height = "80%"
 [[keys.command]]
 key = "prefix+alt+t"
 type = "popup"
-command = "just test"
+command = 'PATH="$HOME/.cargo/bin:$PATH" just test'
 description = "just test"
 width = "80%"
 height = "80%"
@@ -74,7 +74,7 @@ height = "80%"
 [[keys.command]]
 key = "prefix+j"
 type = "popup"
-command = "just --chooser \"fzf -1 --bind=j:down,k:up,q:abort,one:accept\" --choose || read -p 'press enter to close' _"
+command = "PATH=\"$HOME/.cargo/bin:$PATH\" just --chooser \"fzf -1 --bind=j:down,k:up,q:abort,one:accept\" --choose || read -p 'press enter to close' _"
 description = "pick just recipe"
 width = "80%"
 height = "80%"
