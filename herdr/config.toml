@@ -32,6 +32,14 @@ width = "70%"
 height = "50%"
 
 [[keys.command]]
+key = "prefix+e"
+type = "popup"
+command = '$(dirname "$(readlink ~/.config/herdr/config.toml)")/worktree-nav.sh'
+description = "navigate worktrees"
+width = "70%"
+height = "50%"
+
+[[keys.command]]
 key = "prefix+alt+c"
 type = "popup"
 command = 'PATH="$HOME/.cargo/bin:$PATH" just check'
