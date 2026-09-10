@@ -7,10 +7,18 @@ set -euo pipefail
 
 esc=$(printf '\033')
 
+# Resolve the repo from the triggering pane's cwd, not the focused-UI pane.
+# herdr worktree list keys off --cwd; bare it uses whatever pane the UI focuses.
+wt=$(herdr worktree list --cwd "$PWD" 2>/dev/null) || wt=""
+if [[ -z "$wt" ]] || [[ "$(jq -r '.result.worktrees | length' <<<"$wt" 2>/dev/null)" == "0" ]]; then
+  echo "no git worktrees for $PWD"
+  read -rp 'press enter to close' _
+  exit 0
+fi
+
 # Hidden cols: path \t workspace_id \t repo_root \t linked(0|1) \t <display>
 out=$(
-  herdr worktree list \
-    | jq -r --arg e "$esc" '
+  jq -r --arg e "$esc" '
         def pad($n): . + ([limit(([$n - length, 0] | max); repeat(" "))] | join(""));
         .result.source.repo_root as $repo
         | [ .result.worktrees[]
@@ -23,7 +31,7 @@ out=$(
         | (if .wsid != "-" then "\($e)[36m▸\($e)[0m " else "  " end) as $f
         | (if .linked == "1" then "\($e)[90m⌐\($e)[0m" else " " end) as $g
         | "\(.path)\t\(.wsid)\t\(.repo)\t\(.linked)\t\($f)\($g) \($e)[32m\(.branch | pad($bw))\($e)[0m  \($e)[90m\(.path)\($e)[0m"
-      ' \
+      ' <<<"$wt" \
     | fzf --ansi -1 --with-nth=5.. --delimiter='\t' --expect=d \
           --bind=j:down,k:up,q:abort,one:accept \
           --header='enter: open   d: remove' \
