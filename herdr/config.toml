@@ -35,7 +35,7 @@ height = "50%"
 key = "prefix+e"
 type = "popup"
 command = '$(dirname "$(readlink ~/.config/herdr/config.toml)")/worktree-nav.sh'
-description = "navigate worktrees"
+description = "worktrees (enter open, d remove)"
 width = "70%"
 height = "50%"
 
