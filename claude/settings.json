@@ -32,18 +32,6 @@
           }
         ]
       }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/hooks/cc-worktree-label.sh",
-            "timeout": 5
-          }
-        ]
-      }
     ]
   },
   "statusLine": {
