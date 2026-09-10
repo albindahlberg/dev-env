@@ -40,6 +40,14 @@ width = "70%"
 height = "50%"
 
 [[keys.command]]
+key = "prefix+t"
+type = "popup"
+command = '$(dirname "$(readlink ~/.config/herdr/config.toml)")/worktree-new.sh'
+description = "new worktree in a tab"
+width = "50%"
+height = "30%"
+
+[[keys.command]]
 key = "prefix+alt+c"
 type = "popup"
 command = 'PATH="$HOME/.cargo/bin:$PATH" just check'
