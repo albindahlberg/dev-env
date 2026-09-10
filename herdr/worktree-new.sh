@@ -11,5 +11,5 @@ read -rp 'new worktree name: ' name
 [[ -n "$name" ]] || exit 0
 slug=${name// /-}
 
-herdr worktree create --cwd "$repo" --branch "$slug" --label "⑂ $slug" --focus \
+herdr worktree create --cwd "$repo" --branch "$slug" --focus \
   || { read -rp 'worktree create failed — press enter to close' _; exit 1; }
