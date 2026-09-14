@@ -1,5 +1,3 @@
-local coq = require("coq")
-
 vim.api.nvim_create_autocmd("LspAttach", {
 	callback = function(args)
 		local client = vim.lsp.get_client_by_id(args.data.client_id)
@@ -26,41 +24,32 @@ require("mason-lspconfig").setup({
 })
 
 -- Configure servers using the new vim.lsp.config API
-vim.lsp.config("*", coq.lsp_ensure_capabilities({}))
+vim.lsp.config("*", { capabilities = vim.lsp.protocol.make_client_capabilities() })
 
-vim.lsp.config(
-	"ruff",
-	coq.lsp_ensure_capabilities({
-		on_attach = function(client, bufnr)
-			client.server_capabilities.hoverProvider = false
-			vim.keymap.set("n", "<leader>cf", function()
-				vim.lsp.buf.code_action({
-					context = { only = { "source.fixAll" } },
-					apply = true,
-				})
-			end, { buffer = bufnr, desc = "Ruff: Fix all" })
-		end,
-	})
-)
+vim.lsp.config("ruff", {
+	on_attach = function(client, bufnr)
+		client.server_capabilities.hoverProvider = false
+		vim.keymap.set("n", "<leader>cf", function()
+			vim.lsp.buf.code_action({
+				context = { only = { "source.fixAll" } },
+				apply = true,
+			})
+		end, { buffer = bufnr, desc = "Ruff: Fix all" })
+	end,
+})
 
-vim.lsp.config(
-	"bashls",
-	coq.lsp_ensure_capabilities({
-		filetypes = { "sh", "bash", "zsh" },
-		settings = {
-			bashIde = {
-				globPattern = "*@(.sh|.bash|.zsh|.bashrc|.bash_profile|.bash_login|.bash_logout|.bash_aliases)",
-			},
+vim.lsp.config("bashls", {
+	filetypes = { "sh", "bash", "zsh" },
+	settings = {
+		bashIde = {
+			globPattern = "*@(.sh|.bash|.zsh|.bashrc|.bash_profile|.bash_login|.bash_logout|.bash_aliases)",
 		},
-	})
-)
+	},
+})
 
-vim.lsp.config(
-	"postgres_lsp",
-	coq.lsp_ensure_capabilities({
-		filetypes = { "sql" },
-	})
-)
+vim.lsp.config("postgres_lsp", {
+	filetypes = { "sql" },
+})
 
 vim.lsp.enable({
 	"ty",
