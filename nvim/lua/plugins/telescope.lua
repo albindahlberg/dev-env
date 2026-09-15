@@ -34,7 +34,5 @@ return {
 				end,
 			}),
 		})
-		-- Apply the theme
-		vim.cmd("colorscheme onedark")
 	end,
 }
