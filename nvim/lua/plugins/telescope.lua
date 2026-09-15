@@ -34,5 +34,7 @@ return {
 				end,
 			}),
 		})
+
+		vim.keymap.set("n", "<leader>cs", "<cmd>Telescope colorscheme<cr>", { desc = "Switch colorscheme" })
 	end,
 }

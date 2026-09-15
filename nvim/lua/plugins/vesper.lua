@@ -1,7 +1,6 @@
 return {
 	"datsfilipe/vesper.nvim",
-	lazy = false,
-	priority = 1000,
+	lazy = true, -- lazy.nvim auto-loads on `:colorscheme vesper`
 	config = function()
 		-- ponytail: lightened bg ladder (vesper ships dark-only, no light variant)
 		require("vesper").setup({
@@ -29,6 +28,5 @@ return {
 				["@text.uri.html"] = { underline = true },
 			},
 		})
-		vim.cmd.colorscheme("vesper")
 	end,
 }
