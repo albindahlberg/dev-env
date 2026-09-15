@@ -3,6 +3,28 @@ return {
         "nvim-treesitter/nvim-treesitter",
         lazy = false,
         build = ":TSUpdate",
+        config = function()
+            -- main-branch rewrite: no auto-highlight, must install parsers
+            -- and start treesitter per-buffer ourselves (see nvim-treesitter README)
+            local parsers = {
+                "lua",
+                "python",
+                "rust",
+                "bash",
+                "yaml",
+                "sql",
+                "markdown",
+                "markdown_inline",
+                "vim",
+                "vimdoc",
+            }
+            require("nvim-treesitter").install(parsers)
+            vim.api.nvim_create_autocmd("FileType", {
+                callback = function()
+                    pcall(vim.treesitter.start)
+                end,
+            })
+        end,
     },
     {
         "nvim-treesitter/nvim-treesitter-textobjects",
