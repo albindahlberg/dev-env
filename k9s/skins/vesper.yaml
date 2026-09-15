@@ -1,22 +1,22 @@
 k9s:
   body:
     fgColor: '#CCCCCC'
-    bgColor: '#101010'
+    bgColor: '#232323'
     logoColor: '#FFCFA8'
   prompt:
     fgColor: '#CCCCCC'
-    bgColor: '#161616'
+    bgColor: '#282828'
     suggestColor: '#99FFE4'
   help:
     fgColor: '#CCCCCC'
-    bgColor: '#101010'
+    bgColor: '#232323'
     sectionColor: '#FFCFA8'
     keyColor: '#99FFE4'
     numKeyColor: '#FFC799'
   frame:
     title:
       fgColor: '#FFCFA8'
-      bgColor: '#101010'
+      bgColor: '#232323'
       highlightColor: '#FFC799'
       counterColor: '#99FFE4'
       filterColor: '#FFCFA8'
@@ -28,7 +28,7 @@ k9s:
       keyColor: '#99FFE4'
       numKeyColor: '#FFC799'
     crumbs:
-      fgColor: '#101010'
+      fgColor: '#232323'
       bgColor: '#FFCFA8'
       activeColor: '#FFC799'
     status:
@@ -46,24 +46,24 @@ k9s:
   views:
     table:
       fgColor: '#CCCCCC'
-      bgColor: '#101010'
-      cursorFgColor: '#161616'
-      cursorBgColor: '#101010'
+      bgColor: '#232323'
+      cursorFgColor: '#282828'
+      cursorBgColor: '#232323'
       markColor: '#FFCFA8'
       header:
         fgColor: '#FFC799'
-        bgColor: '#101010'
+        bgColor: '#232323'
         sorterColor: '#FFCFA8'
     xray:
       fgColor: '#CCCCCC'
-      bgColor: '#101010'
-      cursorColor: '#232323'
-      cursorTextColor: '#101010'
+      bgColor: '#232323'
+      cursorColor: '#2E2E2E'
+      cursorTextColor: '#232323'
       graphicColor: '#FFCFA8'
     charts:
-      bgColor: '#101010'
-      chartBgColor: '#101010'
-      dialBgColor: '#101010'
+      bgColor: '#232323'
+      chartBgColor: '#232323'
+      dialBgColor: '#232323'
       defaultDialColors:
         - '#82D9C2'
         - '#FF8080'
@@ -83,18 +83,18 @@ k9s:
       colonColor: '#7D7D7D'
     logs:
       fgColor: '#CCCCCC'
-      bgColor: '#101010'
+      bgColor: '#232323'
       indicator:
         fgColor: '#99FFE4'
-        bgColor: '#101010'
+        bgColor: '#232323'
         toggleOnColor: '#82D9C2'
         toggleOffColor: '#7D7D7D'
   dialog:
     fgColor: '#FFC799'
-    bgColor: '#282828'
-    buttonFgColor: '#101010'
+    bgColor: '#343434'
+    buttonFgColor: '#232323'
     buttonBgColor: '#CCCCCC'
-    buttonFocusFgColor: '#101010'
+    buttonFocusFgColor: '#232323'
     buttonFocusBgColor: '#FFCFA8'
     labelFgColor: '#FFC799'
     fieldFgColor: '#CCCCCC'
