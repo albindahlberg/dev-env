@@ -90,8 +90,8 @@ height = "80%"
 [[keys.command]]
 key = "prefix+j"
 type = "popup"
-command = "PATH=\"$HOME/.cargo/bin:$PATH\" just --chooser \"fzf -1 --bind=j:down,k:up,q:abort,one:accept\" --choose || read -p 'press enter to close' _"
-description = "pick just recipe"
+command = '$(dirname "$(readlink ~/.config/herdr/config.toml)")/pick-task.sh'
+description = "pick just/task/make target"
 width = "80%"
 height = "80%"
 
