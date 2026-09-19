@@ -5,7 +5,20 @@
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
   },
   "permissions": {
-    "defaultMode": "auto"
+    "defaultMode": "auto",
+    "deny": [
+      "Read(**/.env)",
+      "Read(**/.env.*)",
+      "Read(**/*.pem)",
+      "Read(**/*.key)",
+      "Read(**/id_rsa*)",
+      "Read(**/id_ed25519*)",
+      "Read(~/.ssh/**)",
+      "Read(~/.aws/**)",
+      "Read(~/.config/gcloud/**)",
+      "Read(~/.kube/config)",
+      "Read(~/.netrc)"
+    ]
   },
   "hooks": {
     "PreToolUse": [
@@ -19,6 +32,15 @@
             "continueOnBlock": true
           }
         ]
+      },
+      {
+        "matcher": "Bash|Read|Grep|Glob|Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/secret-guard.sh tool"
+          }
+        ]
       }
     ],
     "SessionStart": [
@@ -29,6 +51,16 @@
             "type": "command",
             "command": "bash ~/.claude/hooks/herdr-agent-state.sh session",
             "timeout": 10
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/secret-guard.sh prompt"
           }
         ]
       }
@@ -61,5 +93,22 @@
   "theme": "dark",
   "editorMode": "vim",
   "teammateMode": "tmux",
-  "autoMemoryEnabled": false
+  "autoMemoryEnabled": false,
+  "sandbox": {
+    "filesystem": {
+      "denyRead": [
+        "**/.env",
+        "**/.env.*",
+        "**/*.pem",
+        "**/*.key",
+        "**/id_rsa*",
+        "**/id_ed25519*",
+        "~/.ssh/**",
+        "~/.aws/**",
+        "~/.config/gcloud/**",
+        "~/.kube/config",
+        "~/.netrc"
+      ]
+    }
+  }
 }
