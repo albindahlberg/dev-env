@@ -5,6 +5,8 @@ Portable `~/.claude` config. Copy contents into `~/.claude/`.
 Excluded (machine-local / secret): `.credentials.json`, `history.jsonl`,
 `sessions/`, `projects/`, `tasks/`, `teams/`, `file-history/`, caches.
 
+`skills/` holds global skills (conventional-commit, worktree-naming, pr, issue-writing).
+
 `settings.json` registers plugin marketplaces but leaves every plugin off by
 default (`enabledPlugins` values are `false`). Enable what you want per machine —
 those toggles stay local.
