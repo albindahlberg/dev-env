@@ -17,7 +17,8 @@ sel=$(
         | [ .result.agents[]
             | { pane: .pane_id, foc: .focused, s: .agent_status,
                 wsl: ($wsmap[.workspace_id] // .workspace_id), kind: .agent,
-                title: .terminal_title_stripped } ] as $rows
+                title: .terminal_title_stripped } ]
+          | sort_by({blocked:0,done:1,idle:2,working:3}[.s] // 4) as $rows
         | ($rows | map(.s   | length) | max) as $sw
         | ($rows | map(.wsl | length) | max) as $ww
         | ($rows | map(.kind| length) | max) as $kw
