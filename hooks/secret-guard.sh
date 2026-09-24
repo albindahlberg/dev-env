@@ -12,6 +12,15 @@ tool)
        && ! grep -qE '\.env\.(example|sample|template|dist)' <<<"$args"; } \
      || grep -qE '(id_rsa|id_ed25519|\.pem|\.aws/credentials|\.ssh/|\.netrc|\.kube/config)' <<<"$args"; then
     echo "secret-guard: blocked access to a secret file" >&2; exit 2
+  fi
+  # ponytail: oc/kubectl plus the secret resource or a token dump anywhere in a command
+  # or in text written to a file (a script run later); co-occurrence, not parsing, so a
+  # doc mentioning both gets blocked and `get all -o yaml` still slips through.
+  case $(jq -r '.tool_name // ""' <<<"$in") in Read|Grep|Glob) txt= ;;
+    *) txt=$(jq -r '[.tool_input | .. | strings] | join("\n")' <<<"$in") ;; esac
+  if grep -qE '(^|[^A-Za-z0-9_-])(oc|kubectl)([^A-Za-z0-9_-]|$)' <<<"$txt" \
+     && grep -qE '(^|[^A-Za-z0-9_-])(secrets?([^A-Za-z0-9_-]|$)|extract|create[^A-Za-z0-9]+token|whoami[^A-Za-z0-9].*(-t|--show-token))' <<<"$txt"; then
+    echo "secret-guard: blocked reading secrets from the cluster" >&2; exit 2
   fi ;;
 prompt)
   p=$(jq -r '.prompt // ""' <<<"$in")

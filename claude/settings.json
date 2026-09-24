@@ -18,6 +18,10 @@
       "Read(~/.config/gcloud/**)",
       "Read(~/.kube/config)",
       "Read(~/.netrc)"
+    ],
+    "ask": [
+      "Bash(kubectl *)",
+      "Bash(oc *)"
     ]
   },
   "hooks": {
