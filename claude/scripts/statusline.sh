@@ -36,7 +36,24 @@ LIMITS=""
 BRANCH=""
 git rev-parse --git-dir > /dev/null 2>&1 && BRANCH=" | 🌿 $(git branch --show-current 2>/dev/null)"
 
-echo -e "${CYAN}[$MODEL]${RESET} 📁 ${DIR##*/}$BRANCH"
+# Issues the branch's PR closes. gh is slow: read a cache, refresh stale ones in the background.
+TIMEOUT=$(command -v timeout || command -v gtimeout)
+PR=""; ISSUE_LABEL="🎫"
+if [ -n "$BRANCH" ] && command -v gh > /dev/null; then
+  KEY=$(printf '%s' "$DIR $(git -C "$DIR" branch --show-current 2>/dev/null)" | cksum | cut -d' ' -f1)
+  CACHE="${XDG_CACHE_HOME:-$HOME/.cache}/claude-statusline/$KEY"
+  mkdir -p "${CACHE%/*}"
+  if [ ! -e "$CACHE" ] || [ $((NOW - $(stat -c %Y "$CACHE" 2>/dev/null || stat -f %m "$CACHE"))) -gt 60 ]; then
+    touch "$CACHE"  # ponytail: mark fresh first so concurrent renders don't pile up gh calls
+    ( cd "$DIR" && ${TIMEOUT:+$TIMEOUT 10} gh pr view --json closingIssuesReferences -q \
+        '[.closingIssuesReferences[]|"#\(.number)"]|join(", ")' \
+        > "$CACHE.tmp" 2>/dev/null; mv -f "$CACHE.tmp" "$CACHE" ) > /dev/null 2>&1 &
+  fi
+  P=$(cat "$CACHE" 2>/dev/null)
+  [ -n "$P" ] && PR=" | $ISSUE_LABEL $P"
+fi
+
+echo -e "${CYAN}[$MODEL]${RESET} 📁 ${DIR##*/}$BRANCH$PR"
 COST_FMT=$(printf '$%.2f' "$COST")
 echo -e "${BAR_COLOR}${BAR}${RESET} ${PCT}% | ${TOK} | ${YELLOW}${COST_FMT}${RESET} | ⏱️ ${MINS}m ${SECS}s${LIMITS:+ | $LIMITS}"
 

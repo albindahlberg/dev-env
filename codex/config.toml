@@ -1,0 +1,11 @@
+# Seed for ~/.codex/config.toml. install.sh copies this only if the file
+# doesn't exist yet — Codex rewrites this file (trust list, MCP servers,
+# per-machine model/auth settings) so it's never symlinked or overwritten
+# after that. Machine-specific bits (project trust list, MCP server keys,
+# notify hooks) are intentionally left out here; add them locally.
+
+[tui]
+status_line = ["model-with-reasoning", "context-used", "current-dir", "context-window-size"]
+
+[features]
+hooks = true

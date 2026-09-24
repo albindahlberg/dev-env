@@ -1,14 +1,17 @@
 ---
 name: pr
-description: Write pull request titles and descriptions. Use whenever creating or updating a PR (gh pr create/edit) or drafting PR text.
+description: Write pull request titles and descriptions. Use whenever creating or updating a PR (gh pr create/edit) or drafting PR text, unless the repo root has a .pr_agent.toml.
 ---
 
 # PR
 
+Skip this skill if `.pr_agent.toml` exists in the repo root. PR-Agent writes
+the title and description there, so leave them to it.
+
 Title: MUST use a conventional prefix: `type(scope)?: description`
 (`feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert`, see
-`conventional-commit`). Lowercase, imperative, no trailing period, <= 70 chars.
-Type = dominant change of the PR, matching its branch (`worktree-naming`).
+`commit`). Lowercase, imperative, no trailing period, <= 70 chars.
+Type = dominant change of the PR, matching its branch (`worktree`).
 Examples: `feat(herdr): add target picker`, `fix(auth): refresh expired token`.
 Never open or edit a PR with an unprefixed title.
 
@@ -33,12 +36,10 @@ Default structure (no template):
 2. **What** - short bullets of the changes that matter. Group by area.
 3. **Notes** - only if needed: risks, migrations, follow-ups, how to test.
 
-Use visuals when they beat prose (skip otherwise):
-- **Table** - many files/modules/options, before vs after, config changes,
-  behavior matrix.
-- **Mermaid diagram** - flow, sequence, architecture, or state changes
-  (`flowchart`, `sequenceDiagram`, `stateDiagram-v2`). Keep < ~10 nodes.
-- **Code block** - only for a key snippet or before/after.
+Visuals: follow the `show-me` skill. Pick the smallest view that makes the
+change clear (pseudocode, call tree, component tree, file tree, Mermaid,
+`diff` of shape, table for before/after or many options). Skip if prose is
+clearer. Inline Markdown only; no HTML files or previews in a PR body.
 
 Example:
 

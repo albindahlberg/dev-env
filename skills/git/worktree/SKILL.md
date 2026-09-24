@@ -1,9 +1,9 @@
 ---
-name: worktree-naming
+name: worktree
 description: Name git worktrees and their branches per Conventional Commits. Use whenever creating a worktree or branch (EnterWorktree, git worktree add, git switch -c).
 ---
 
-# Worktree naming
+# Worktree
 
 Branch: `type/short-kebab-description`, with `type` from Conventional Commits
 (`feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert`).
@@ -25,3 +25,11 @@ Examples:
 - `chore/bump-deps` -> `chore-bump-deps`
 
 If type unclear, ask once, don't guess `chore`.
+
+## Creating it
+
+Main session (not in a subagent): use `EnterWorktree` with the name above.
+
+Inside a subagent: `EnterWorktree` refuses — it won't mutate a cwd-pinned
+subagent's working directory. Use `git worktree add <dir> -b <branch>`
+directly, same naming as above.
