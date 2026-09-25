@@ -7,8 +7,10 @@ case "$1" in
 tool)
   # ponytail: regex over the raw tool input, so obfuscated shell (cat $(echo .e)nv) slips
   # through; the sandbox denyRead is the real backstop for Bash.
+  # env-file suffix is lowercase-only, so a jq path into an UPPER_CASE env key passes.
+  # ponytail: a lowercase or bare jq path on the env key still blocks; write .["env"] there.
   args=$(jq -c '.tool_input // {}' <<<"$in")
-  if { grep -qE '(^|[/ "'"'"'=])\.env(\.[A-Za-z0-9_-]+)?($|[ "'"'"'/;|&<>)])' <<<"$args" \
+  if { grep -qE '(^|[/ "'"'"'=])\.env(\.[a-z0-9_-]+)?($|[ "'"'"'/;|&<>)])' <<<"$args" \
        && ! grep -qE '\.env\.(example|sample|template|dist)' <<<"$args"; } \
      || grep -qE '(id_rsa|id_ed25519|\.pem|\.aws/credentials|\.ssh/|\.netrc|\.kube/config)' <<<"$args"; then
     echo "secret-guard: blocked access to a secret file" >&2; exit 2
