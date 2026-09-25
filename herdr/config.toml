@@ -134,6 +134,8 @@ green = "#a6e3a1"
 yellow = "#f9e2af"
 red = "#f38ba8"
 teal = "#94e2d5"
+# Hover row in pickers/navigate mode; vesper's default is too dark to spot.
+selection_bg = "#333333"
 
 [ui.toast]
 delivery = "herdr"
