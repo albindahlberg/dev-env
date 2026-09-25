@@ -4,5 +4,3 @@ settings.local.json
 *.key
 *.bak.*
 nvim/.nvimlog
-# herdr-managed, installed by `herdr integration install claude`
-claude/hooks/herdr-agent-state.sh
