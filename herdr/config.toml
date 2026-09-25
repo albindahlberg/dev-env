@@ -115,9 +115,25 @@ host_cursor = "native"
 
 show_agent_labels_on_pane_borders = true
 
+# state_text is drawn in the state color, like herdr.dev's "working · claude".
+# The agent token itself can't follow state: its rules only match its own value.
+[ui.sidebar.agents]
+rows = [
+  ["state_icon", "workspace"],
+  ["state_text", "agent"],
+]
+
 [theme]
 name = "vesper"
 auto_switch = false
+
+# Catppuccin Mocha state colors (as on herdr.dev) on top of vesper.
+# State colors: green = idle, yellow = working, red = blocked, teal = done.
+[theme.custom]
+green = "#a6e3a1"
+yellow = "#f9e2af"
+red = "#f38ba8"
+teal = "#94e2d5"
 
 [ui.toast]
 delivery = "herdr"
