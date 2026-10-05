@@ -21,8 +21,9 @@ tracked.
    and `codex/hooks/secret-guard.sh` → `../../hooks/secret-guard.sh`. One
    skill or hook, two tools, no drift between copies.
 
-   `skills/` is organized by category — `skills/github/`, `skills/git/`,
-   `skills/workflow/`, one dir per skill inside. That nesting is a repo-side
+   `skills/` is organized by category (`skills/github/`, `skills/git/`,
+   `skills/workflow/`, ... — `ls skills/` for the current set), one dir per
+   skill inside. That nesting is a repo-side
    convenience only: neither Claude Code nor Codex reads a categorized skills
    dir, so `claude/skills/*` and `codex/skills/*` stay flat, symlinked by the
    skill's own basename regardless of which category it's filed under.
@@ -56,7 +57,7 @@ tracked.
 ## Adding a new shared skill or hook
 
 - Put the real file under `skills/<category>/<name>/` or `hooks/<name>`. Use
-  an existing category (`github`, `git`, `workflow`) if the skill fits one;
+  an existing category (`ls skills/`) if the skill fits one;
   only add a new category directory once a skill actually needs it — don't
   pre-create empty ones for hypothetical future skills.
 - Symlink it from both `claude/skills/<name>` and `codex/skills/<name>`
@@ -64,8 +65,15 @@ tracked.
   ones — copy the pattern, don't invent a new one). The live symlink name is
   always the skill's basename, never the category.
 - `install.sh`'s `for s in "$REPO"/skills/*/*/` loop already walks any
-  category directory and links whatever it finds — no install.sh edit needed
-  unless the tool wiring itself differs.
+  category directory and links whatever it finds. Hooks work the same way:
+  every real file in `hooks/` (shared) and `claude/hooks/` / `codex/hooks/`
+  (tool-only) gets linked; symlinks there are skipped since they point back
+  into `hooks/`. No install.sh edit needed unless the tool wiring itself
+  differs — but a new hook still has to be registered in the tool's settings
+  (see point 4: seeded files don't update, so add it to the live file too).
+- A skill only one tool needs (the other already covers it via a plugin) goes
+  in as a real dir under that tool's `skills/` instead, e.g.
+  `codex/skills/tdd`; install.sh links real dirs there too.
 - Skip a skill if a marketplace plugin already installed for that tool covers
   the same trigger phrases — check the tool's available-skills/plugins list
   before adding a local copy that'll just shadow or duplicate it.

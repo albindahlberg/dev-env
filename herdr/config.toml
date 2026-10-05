@@ -35,7 +35,7 @@ height = "50%"
 key = "prefix+e"
 type = "popup"
 command = '$(dirname "$(readlink ~/.config/herdr/config.toml)")/worktree-nav.sh'
-description = "worktrees (enter open, d remove)"
+description = "worktrees (enter open, tab mark, d remove, n new)"
 width = "70%"
 height = "50%"
 
@@ -129,13 +129,16 @@ auto_switch = false
 
 # Catppuccin Mocha state colors (as on herdr.dev) on top of vesper.
 # State colors: green = idle, yellow = working, red = blocked, teal = done.
+# yellow is left at vesper's #ffc799, the same as its accent (active tab), so
+# working matches the tab highlight.
 [theme.custom]
 green = "#a6e3a1"
-yellow = "#f9e2af"
 red = "#f38ba8"
 teal = "#94e2d5"
 # Hover row in pickers/navigate mode; vesper's default is too dark to spot.
 selection_bg = "#333333"
+# Pane area follows the host terminal background (matches the sidebar).
+panel_bg = "reset"
 
 [ui.toast]
 delivery = "herdr"

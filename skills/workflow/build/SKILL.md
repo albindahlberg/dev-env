@@ -26,12 +26,11 @@ different intents run in parallel with each other and with plain issues.
    issue, single message, multiple Agent tool calls. Give each subagent the
    issue number and this skill's steps — it has no memory of this
    conversation.
-4. Wait for all subagents. For each draft PR, run
-   `mattpocock-skills:code-review` on its branch here in the coordinator
-   (it spawns its own sub-agents, which a subagent can't), then post the
-   findings as a PR comment.
-5. Report one final summary: per issue, PR link plus review verdict, or
-   blocked/skip reason. Don't repeat subagent tool output.
+4. Wait for all subagents. For each draft PR, run `code-review <PR#>`
+   here in the coordinator (it spawns its own sub-agents, which a subagent
+   can't), then fix its findings per **Addressing review findings**.
+5. Report one final summary: per issue, PR link plus findings fixed and
+   dismissed, or blocked/skip reason. Don't repeat subagent tool output.
 
 ## Per-issue pipeline (subagent)
 
@@ -45,7 +44,7 @@ different intents run in parallel with each other and with plain issues.
 3. **Implement**, inside that worktree:
    - Use `mattpocock-skills:tdd` where it fits, at pre-agreed seams.
    - Typecheck and run single test files regularly; full suite once at the end.
-   - Don't run `mattpocock-skills:code-review` here; the coordinator does.
+   - Don't run `code-review` here; the coordinator does.
    - Commit to the branch (per `commit`).
 4. **Ship** - push the branch, open the PR **as draft**
    (`gh pr create --draft`), title/body per the `pr` skill, body includes
@@ -76,13 +75,27 @@ lines, never re-decided here.
      from a later slice): blocked path, don't reorder. Stop the stack; the
      fix belongs in the spec.
    - **Review gate** - after each layer ships, the coordinator runs
-     `code-review` on it and posts the findings on its PR. Correctness or
-     design findings get fixed on that branch (a fresh subagent given the
-     findings) before the next layer starts; nits stay as PR comments.
-     Layers above are never built on known-broken code.
+     `code-review` on it and fixes the findings as in coordinator step 4
+     before the next layer starts (the fixer pushes with
+     `gh stack submit`). Layers above are never built on known-broken code.
 3. Swap the intent **working -> review**; report the stack's PR links in
-   order plus verdicts.
+   order plus findings fixed and dismissed.
 
-This skill only sequences `issue`, `worktree`, `pr`, `commit`,
-`gh-stack` and the mattpocock `tdd`/`code-review` skills - it doesn't restate their
-rules, follow them directly.
+## Addressing review findings
+
+Fix findings without mentioning the review on the PR: no review comments,
+no PR comment. Spawn one fresh subagent per PR in that PR's worktree,
+given the findings verbatim (it has no memory of the review). It fixes
+each finding, or dismisses it only if it's wrong, reruns the tests,
+commits per `commit` and pushes. Then it overwrites the PR body
+(`gh pr edit --body`, per `pr`) so it describes the change's final state.
+It returns the dismissed findings with reasons to the coordinator, which
+puts them in its final report only. A dismissal that reflects a real
+design decision goes in a code comment or the PR body's Notes, written as
+a statement about the design, never as a reply to the review. No
+findings: skip the subagent. This applies to the Stack mode review gate
+too.
+
+This skill only sequences `issue`, `worktree`, `pr`, `commit`, `gh-stack`,
+`code-review` and `mattpocock-skills:tdd` - it
+doesn't restate their rules, follow them directly.

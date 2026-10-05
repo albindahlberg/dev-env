@@ -13,11 +13,15 @@ Worktree directory/name: same string with `/` -> `-`
 (branch `feat/add-login` -> worktree `feat-add-login`).
 
 Rules:
-- lowercase, kebab-case, a-z 0-9 `-` only
+- lowercase, kebab-case, a-z 0-9 `-` only (a JIRA key keeps its case)
 - imperative, <= 40 chars after the type, no trailing dash
 - type = dominant change of the work (same one the PR title/commits will use)
-- ticket id allowed after type: `fix/ABC-123-null-session`
 - never `wip`, `test`, `tmp`, `new-branch`, or random names
+
+Ticket prefix after the type, first match wins:
+1. JIRA ticket: its key, `chore/K-213-kebab-desc`
+2. GitHub issue: its number, `chore/231-kebab-desc`
+3. Neither: no prefix, `chore/kebab-desc`
 
 Examples:
 - `feat/herdr-target-picker` -> `feat-herdr-target-picker`

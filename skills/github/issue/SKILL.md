@@ -113,10 +113,18 @@ Default structure (no template):
 2. **Scope** - checklist of concrete deliverables.
 3. **Out of scope / notes** - only if needed.
 
-Use visuals when they beat prose (skip otherwise):
+Visuals: call the Skill tool for `show-me` and add one only where the reader
+would otherwise have to rebuild a picture in their head from prose. Pick its
+smallest fitting shape:
 - **Table** - expected vs actual per case, options compared, affected versions.
-- **Mermaid diagram** - flow, sequence, or state where the bug or design lives.
+- **Flow / sequence / state (Mermaid)** - where the bug happens or how today's
+  flow works across components.
+- **Call or file tree, or a `diff` on one** - where a change lands.
 - **Code block** - exact error text, command, or minimal snippet. Trim logs.
+
+Skip it when one or two sentences say the same thing. In the issue body,
+write Mermaid source (GitHub renders it); in chat drafts, render per
+`show-me`. Inline Markdown only: no HTML files or previews in an issue.
 
 Rules:
 - no empty sections; drop headings with nothing to say

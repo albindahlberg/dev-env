@@ -26,7 +26,7 @@ a link target is moved to `<target>.bak.<timestamp>`.
 
 `skills/` and `hooks/` at the repo root are shared between `claude/` and
 `codex/` — both tool dirs hold symlinks into them, not copies. `skills/` is
-grouped by category (`github/`, `git/`, `workflow/`, `writing/`, ...); the live `~/.claude` and
+grouped by category (`git/`, `github/`, `workflow/`, ... — `ls skills/`); the live `~/.claude` and
 `~/.codex` skill dirs stay flat regardless. See `AGENTS.md`.
 
 Tools come from Homebrew (installed if missing) plus the official installers for

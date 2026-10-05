@@ -5,6 +5,10 @@ description: Enforce Conventional Commits for every git commit message. Use when
 
 # Commit
 
+If the repo defines its own commit convention (a repo-local skill like
+`conventional-commits`, or CONTRIBUTING/AGENTS docs), follow it instead;
+its types and rules win over the defaults below.
+
 Format: `type(scope)?: description`
 
 - type: `feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert`

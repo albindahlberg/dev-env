@@ -1,0 +1,7 @@
+# Repos under ~/albindahlberg/ push as the personal GitHub account; everything
+# else uses gh's active account (albin-dahlberg). Included via includeIf by install.sh.
+[credential "https://github.com"]
+	helper =
+	helper = "!f() { test \"$1\" = get && echo username=albindahlberg && echo password=$(gh auth token --user albindahlberg); }; f"
+[url "https://github.com/"]
+	insteadOf = git@github.com:
