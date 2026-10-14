@@ -3,7 +3,7 @@ name: config-sync
 description: 'Audit this machine''s agent-tool configs (claude, codex, pi, opencode, and any other CLI under ~/.<tool> or ~/.config/<tool>) against this repo (dev-env) to find skills or hooks that exist live but aren''t tracked yet, then fold them in — move the real file into the repo under the right place and symlink the live path(s) back to it. Use when the user wants to sync configs, audit dotfiles, catch drift between machines, or find local-only skills/hooks not yet in the repo. Trigger: "sync configs", "audit dotfiles", "sync skills to repo", "check for local skills/hooks", or /config-sync.'
 ---
 
-Read `AGENTS.md` first — it's the pattern this skill applies. The short version: real files live in this repo under `skills/<category>/<name>/` or `hooks/<name>`; each tool's own dir (`claude/`, `codex/`, ...) holds symlinks back into them.
+Read `AGENTS.md` first — it's the pattern this skill applies.
 
 ## Hard constraint
 
@@ -18,7 +18,7 @@ When probing a tool you don't have a table entry for yet (e.g. a new CLI), only 
 | claude | `~/.claude` | `skills/*` | `hooks/*` | file-by-file symlinks into repo `claude/` |
 | codex | `~/.codex` | `skills/*` | `hooks/*`, plus root-level hook files like `herdr-agent-state.sh` | file-by-file symlinks into repo `codex/` |
 | pi | `~/.pi` | `agent/skills/*` | none known | `~/.pi` is one symlink to repo `pi/` as a whole (not file-by-file) — see pi note below |
-| opencode | `~/.config/opencode` or `~/.opencode`, whichever exists | probe for it | probe for it | not set up on this machine as of writing; check both roots, skip entirely if neither exists |
+| opencode | `~/.config/opencode` or `~/.opencode`, whichever exists | probe for it | probe for it | check both roots, skip entirely if neither exists |
 
 If a tool's root doesn't exist on this machine, skip it silently — don't create it.
 
@@ -49,7 +49,7 @@ For a candidate that exists under only one tool, that tool's copy is the source;
 
 1. `git mv` (tracked) or `mv` + `git add` (untracked) the real file into its repo location. For pi, it's typically already inside the repo (see pi note above) — this step may just be `git mv` within the repo tree, no filesystem move to/from `~/.pi`.
 2. Symlink the live path(s) back with `ln -sfn <abs-repo-path> <live-path>` for every tool that should have it — except pi, where the symlink you create at `pi/agent/skills/<name>` (relative, into `../../skills/<category>/<name>`) is *inside* the repo and needs no separate live-side `ln`, since `~/.pi` already resolves there through the existing whole-dir link.
-3. Skills for claude/codex are picked up automatically by `install.sh`'s `for s in "$REPO"/skills/*/*/` loop — no edit needed there. Hooks aren't wildcarded: add an explicit `link "$REPO/..." "$HOME/..."` line in `install.sh`'s `install_links`, following the existing lines right above it as the pattern. A brand-new tool needs its own linking added to `install_links` the same way claude/codex/pi are — follow whichever existing tool's shape is the closer match (file-by-file like claude/codex, or whole-dir like pi).
+3. `install.sh` already loops over `skills/*/*/`, `hooks/*` and `<tool>/hooks/*` for claude/codex, so skills and hooks there need no edit. Only a hook living outside those dirs (like codex's root-level herdr hook) needs an explicit `link "$REPO/..." "$HOME/..."` line in `install_links`. A brand-new tool needs its own linking added to `install_links` the same way claude/codex/pi are — follow whichever existing tool's shape is the closer match (file-by-file like claude/codex, or whole-dir like pi).
 4. Run `./install.sh --dry-run --no-packages` afterward and confirm every touched path prints `ok` (idempotent, nothing left dangling).
 5. Update the relevant `README.md` (`claude/README.md`, `codex/README.md`, root `README.md`) and `AGENTS.md` only if the change adds a new category or a new kind of exception (like the tool-specific-hook carve-out) — a same-shape addition to an existing category needs no doc edit.
 

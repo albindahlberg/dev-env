@@ -26,8 +26,8 @@ preferring the `agent:` family, then close synonyms:
 | blocked | `agent:blocked` | `blocked`, `needs info`, `status:blocked` |
 | done | `agent:done` | `status:done` (usually closed by PR merge instead - don't add) |
 
-- No match for a state: skip it silently. Don't create labels unless the user asks.
-  Mention once in the final message that the label is missing.
+- No match for a state other than done: create it as `agent:<state>` (`gh label create`).
+  Same for a workflow label a skill names (`intent`, `spec`).
 - Never touch labels outside these states (type, priority, area, ...).
 
 ### 2. Transitions
@@ -132,3 +132,11 @@ Rules:
 - one problem per issue; split unrelated asks
 - reference the fix with `Closes #123` in the PR, not the issue
 - no secrets, tokens, or private data in logs or screenshots
+
+### Scope changes
+
+A decision that narrows, widens or pivots an issue's scope, wherever it is
+made (grilling, a comment, a sub-issue, an ADR), is edited into the body of
+every issue it changes, the parent intent included. Strike the old line
+(`~~old~~`), add the new one beside it, and link the comment or ADR that
+holds the why. The body states the current scope; comments hold the history.

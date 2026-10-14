@@ -24,8 +24,8 @@ by `build`.
    supplies each question's recommended option. Record each resolved
    decision that meets domain-modeling's ADR bar as an ADR, and new terms
    in `CONTEXT.md`, as you go, not at the end. Any answer that changes the
-   intent (new problem, dropped outcome) goes back to the intent issue as a
-   comment rather than being silently absorbed.
+   intent (new problem, dropped or narrowed outcome) is a scope change:
+   edit it into the intent body per the `issue` skill.
 
 3. **Write** - once the tree is empty, write the spec from the settled
    decisions:
@@ -47,7 +47,7 @@ by `build`.
 
 4. **File** - one sub-issue per slice, in stack order:
    `gh issue create --parent N`, writing per the `issue` skill, title
-   the slice with no prefix, label `spec` (create it if missing), body:
+   the slice with no prefix, label `spec`, body:
 
    ```md
    Intent: #N
@@ -63,8 +63,7 @@ by `build`.
    Commit the ADR / `CONTEXT.md` changes (per `commit`) and link them in
    the relevant sub-issues. Add the repo's **ready** label (per the `issue`
    skill's label discovery, e.g. `agent:ready` / `agent-ready`) to the
-   intent, not the sub-issues, so `build` picks up the whole stack. None
-   exists: create `agent:ready` and use it.
+   intent, not the sub-issues, so `build` picks up the whole stack.
 
 5. **Hand off** - list the sub-issue links in stack order; the next step is
    `/build #N` (the intent).

@@ -18,10 +18,8 @@ different intents run in parallel with each other and with plain issues.
 1. For each issue number, `gh issue view N` first: confirm it exists and
    isn't already `agent:working`/assigned to someone else. Skip + report any
    that fail this check, don't spawn a subagent for them.
-2. Discover the repo's status labels (`issue` skill). For each of
-   **working**, **review** and **blocked** with no match, create it as
-   `agent:<state>` (`gh label create`), overriding the `issue` skill's
-   don't-create rule. Do it here, once, so subagents don't race.
+2. Discover (and create missing) status labels per the `issue` skill here,
+   once, so subagents don't race.
 3. Launch remaining issues as parallel `general-purpose` subagents, one per
    issue, single message, multiple Agent tool calls. Give each subagent the
    issue number and this skill's steps — it has no memory of this
@@ -69,8 +67,7 @@ lines, never re-decided here.
      and runs `gh stack init <branch>`; later ones reuse that worktree and
      run `gh stack add <branch>` (per `gh-stack`).
    - **Ship** - `gh stack submit --auto`, then `gh pr edit` its own PR's
-     title/body per `pr`, `Closes #<sub-issue>`. The top PR also gets
-     `Closes #N` (GitHub doesn't close a parent when its sub-issues close).
+     title/body per `pr`, `Closes #<sub-issue>`.
    - **Blocked** - including "the stack order is wrong" (needs something
      from a later slice): blocked path, don't reorder. Stop the stack; the
      fix belongs in the spec.
@@ -78,7 +75,13 @@ lines, never re-decided here.
      `code-review` on it and fixes the findings as in coordinator step 4
      before the next layer starts (the fixer pushes with
      `gh stack submit`). Layers above are never built on known-broken code.
-3. Swap the intent **working -> review**; report the stack's PR links in
+3. **Outcome gate** - check every Proposed outcome box of the intent
+   against the shipped stack and tick each one delivered, appending the
+   PR that delivers it (`- [x] ... (#42)`). All ticked: put `Closes #N` in
+   the top PR (GitHub doesn't close a parent when its sub-issues close).
+   Any unticked: put `Part of #N` there instead and list the unticked
+   boxes in the report.
+4. Swap the intent **working -> review**; report the stack's PR links in
    order plus findings fixed and dismissed.
 
 ## Addressing review findings
