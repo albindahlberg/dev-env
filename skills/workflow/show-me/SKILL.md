@@ -56,7 +56,11 @@ User --> UI --> Daemon --> UI
 EOF)
 ```
 
-Mermaid never appears in the chat. The user does not see tool output, so paste the rendered output into your reply in a `text` block, in the spot where the Mermaid would have gone. If `mermaid-ascii` fails or is missing, draw the diagram by hand instead.
+The render is not the answer. The user sees at most a collapsed preview of tool output, so a diagram that exists only in the Bash result was never shown. Copy the rendered output verbatim into your reply in a `text` block, in the spot where the Mermaid would have gone. Never redraw, shorten or summarise a render by hand; Mermaid source never appears in the chat either.
+
+If it prints `warning: graph is N columns wide`, the render is too wide to paste. Re-render with `graph TD`, shorter labels, or split it into two diagrams, then paste that. Draw by hand only if `mermaid-ascii` fails or is missing.
+
+Before sending, check: every diagram you rendered is pasted in the reply.
 
 ## Markdown preview: only when needed
 
