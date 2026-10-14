@@ -47,7 +47,11 @@ stack, so it scopes one change. Next stage is the `spec` skill.
    ## Open questions
    ```
 
-   Title: the problem, not the solution, with no prefix. Label it `intent`.
+   Title: the intent, the change wanted, stated as the outcome, not the
+   problem or a solution, with no prefix. E.g. `Lab staff see when a
+   sample's enrichment fails`, not `Enrichment failures are invisible`
+   (problem) or `Add a Kafka dead-letter topic` (solution). Label it
+   `intent`.
 
    **Jira** - when the user names a Jira project, or `AGENTS.md` /
    `CLAUDE.md` says intents live in Jira, file it there instead, same title
