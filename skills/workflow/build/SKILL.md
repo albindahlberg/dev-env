@@ -29,8 +29,8 @@ each other and with plain issues.
 4. Wait for all subagents. For each draft PR, run `code-review <PR#>`
    here in the coordinator (it spawns its own sub-agents, which a subagent
    can't), then fix its findings per **Addressing review findings**.
-5. Report one final summary: per issue, PR link plus findings fixed and
-   dismissed, or blocked/skip reason. Don't repeat subagent tool output.
+5. Report one final summary: per issue, PR link plus findings fixed,
+   dismissed and left optional, or blocked/skip reason. Don't repeat subagent tool output.
 
 ## Per-issue pipeline (subagent)
 
@@ -45,6 +45,8 @@ each other and with plain issues.
 3. **Implement**, inside that worktree:
    - Use `mattpocock-skills:tdd` where it fits, at pre-agreed seams.
    - Typecheck and run single test files regularly; full suite once at the end.
+   - Before shipping, run the issue's Verification check, if it has one,
+     and fix until it passes; its command and result go in the PR body.
    - Don't run `code-review` here; the coordinator does.
    - Commit to the branch (per `commit`).
 4. **Ship** - push the branch, open the PR **as draft**
@@ -90,14 +92,17 @@ lines, never re-decided here.
    under `## Outcomes` instead, no closing line; the key in the branch
    names links the stack to the ticket.
 4. Swap the intent **working -> review** (skip for a Jira intent); report
-   the stack's PR links in order plus findings fixed and dismissed.
+   the stack's PR links in order plus findings fixed, dismissed
+   and left optional.
 
 ## Addressing review findings
 
-Fix findings without mentioning the review on the PR: no review comments,
-no PR comment. Spawn one fresh subagent per PR in that PR's worktree,
-given the findings verbatim (it has no memory of the review). It fixes
-each finding, or dismisses it only if it's wrong, reruns the tests,
+Fix only findings that break correctness or the issue's requirements;
+the coordinator lists the rest in its final report as optional, unfixed.
+Fix them without mentioning the review on the PR: no review comments, no
+PR comment. Spawn one fresh subagent per PR in that PR's worktree, given
+those findings verbatim (it has no memory of the review). It fixes each
+one, or dismisses it only if it's wrong, reruns the tests,
 commits per `commit` and pushes. Then it overwrites the PR body
 (`gh pr edit --body`, per `pr`) so it describes the change's final state.
 It returns the dismissed findings with reasons to the coordinator, which

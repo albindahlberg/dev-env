@@ -43,6 +43,11 @@ plain GitHub issues, not sub-issues, deviations below.
      order: foundations first, dependents after what they need, riskier
      independent slices lower so they're reviewed early. One slice is
      fine for a small change.
+   - **Verification** - per slice, how it's proven to work, in the repo's
+     own testing style: the seams it already tests at (boundaries, unit
+     vs integration), its runner and its density. Name the tests to add
+     or extend and the command that runs them; no new test layers,
+     frameworks or per-function suites the repo doesn't already have.
 
    Add visuals where they beat prose: call the Skill tool for `show-me`
    and pick its smallest fitting shape - flow or sequence for data flow,
@@ -62,6 +67,7 @@ plain GitHub issues, not sub-issues, deviations below.
    ## Requirements
    ## Design
    ## Acceptance criteria
+   ## Verification   <!-- tests to add/extend + the command -->
    ## Decisions        <!-- ADR links, resolved concerns -->
    ## Out of scope     <!-- drop if empty -->
    ```
