@@ -38,6 +38,7 @@ install_links() {
   say "linking configs"
   link "$REPO/nvim"               "$CFG/nvim"
   link "$REPO/k9s"                "$CFG/k9s"
+  link "$REPO/lazygit/config.yml" "$CFG/lazygit/config.yml"
   # herdr keybinds locate their helper scripts via readlink on this file
   link "$REPO/herdr/config.toml"  "$CFG/herdr/config.toml"
   link "$REPO/tmux.conf"          "$HOME/.tmux.conf"
@@ -92,7 +93,7 @@ install_links() {
 
 # --- packages -----------------------------------------------------------
 # command:brew-formula
-BREW_PKGS="git:git nvim:neovim tmux:tmux k9s:k9s jq:jq gh:gh fzf:fzf just:just lazygit:lazygit rg:ripgrep stylua:stylua shfmt:shfmt shellcheck:shellcheck node:node"
+BREW_PKGS="git:git nvim:neovim tmux:tmux k9s:k9s jq:jq gh:gh fzf:fzf just:just lazygit:lazygit rg:ripgrep stylua:stylua shfmt:shfmt shellcheck:shellcheck node:node delta:git-delta"
 
 load_brew() {
   local b

@@ -1,6 +1,6 @@
 # dev-env
 
-Portable dev config: nvim, tmux, herdr, k9s, pi, claude, codex. See `AGENTS.md`
+Portable dev config: nvim, tmux, herdr, k9s, lazygit, pi, claude, codex. See `AGENTS.md`
 for how the agent-tool configs (`claude/`, `codex/`) are put together.
 
 ```sh
@@ -16,6 +16,7 @@ a link target is moved to `<target>.bak.<timestamp>`.
 |---|---|
 | `nvim/` | `~/.config/nvim` |
 | `k9s/` | `~/.config/k9s` |
+| `lazygit/config.yml` | `~/.config/lazygit/config.yml` |
 | `herdr/config.toml` | `~/.config/herdr/config.toml` |
 | `tmux.conf` | `~/.tmux.conf` |
 | `pi/` | `~/.pi` |
