@@ -265,13 +265,6 @@ if not vim.g.vscode then
 		silent = true,
 	})
 
-	vim.keymap.set("n", "<leader>mc", function()
-		vim.cmd("botright 10split | terminal make check")
-	end, {
-		desc = "Run make check in bottom terminal",
-		noremap = true,
-		silent = true,
-	})
 	local function run_cmd_in_float(cmd, title)
 		local width = math.floor(vim.o.columns * 0.9)
 		local height = math.floor(vim.o.lines * 0.85)
@@ -301,14 +294,6 @@ if not vim.g.vscode then
 		end, { buffer = buf, silent = true, nowait = true, desc = "Close " .. title .. " window" })
 	end
 
-	vim.keymap.set("n", "<leader>ms", function()
-		run_cmd_in_float("make smoke", "make smoke")
-	end, {
-		desc = "Run make smoke in floating terminal",
-		noremap = true,
-		silent = true,
-	})
-
 	vim.keymap.set("n", "<leader>tt", function()
 		run_cmd_in_float("uv run pytest", "pytest")
 	end, {
@@ -317,71 +302,7 @@ if not vim.g.vscode then
 		silent = true,
 	})
 
-	vim.keymap.set("n", "<leader>mr", function()
-		run_cmd_in_float("make run", "make run")
-	end, {
-		desc = "Run make run in floating terminal",
-		noremap = true,
-		silent = true,
-	})
-
-	vim.keymap.set("n", "<leader>md", function()
-		run_cmd_in_float("make debug", "make debug")
-	end, {
-		desc = "Run make debug in floating terminal",
-		noremap = true,
-		silent = true,
-	})
-
-	vim.keymap.set("n", "<leader>mt", function()
-		run_cmd_in_float("make test", "make test")
-	end, {
-		desc = "Run make test in floating terminal",
-		noremap = true,
-		silent = true,
-	})
-
 	vim.keymap.set("n", "<leader>mp", "<cmd>MarkdownPreview<CR>", { desc = "Markdown preview" })
-
-	vim.keymap.set("n", "<leader>jc", function()
-		run_cmd_in_float("just check", "just check")
-	end, {
-		desc = "Run just check in floating terminal",
-		noremap = true,
-		silent = true,
-	})
-
-	vim.keymap.set("n", "<leader>js", function()
-		run_cmd_in_float("just smoke", "just smoke")
-	end, {
-		desc = "Run just smoke in floating terminal",
-		noremap = true,
-		silent = true,
-	})
-
-	vim.keymap.set("n", "<leader>jr", function()
-		run_cmd_in_float("just run", "just run")
-	end, {
-		desc = "Run just run in floating terminal",
-		noremap = true,
-		silent = true,
-	})
-
-	vim.keymap.set("n", "<leader>jd", function()
-		run_cmd_in_float("just debug", "just debug")
-	end, {
-		desc = "Run just debug in floating terminal",
-		noremap = true,
-		silent = true,
-	})
-
-	vim.keymap.set("n", "<leader>jt", function()
-		run_cmd_in_float("just test", "just test")
-	end, {
-		desc = "Run just test in floating terminal",
-		noremap = true,
-		silent = true,
-	})
 
 	-- global typos (apply everywhere)
 	vim.cmd("iabbrev teh the")
