@@ -143,6 +143,26 @@ design decision, and leaves each module's implementation to `build`.
 5. **Hand off** - list the sub-issue links in stack order; the next step is
    `/build #N` (the intent).
 
+## Jira intent
+
+Input is a Jira key (`PROJ-123`) instead of an issue number; the rest of
+the steps apply with these changes. Jira is read-only: never edit,
+comment on or transition the ticket.
+
+- **Research** - read it with `acli jira workitem view KEY --json` and
+  `acli jira workitem comment list --key KEY`.
+- **Grill** - the decisions branch is `docs/intent-KEY-decisions`. A
+  scope change goes to the user as what to change in the ticket.
+- **File** - slices are plain issues: `gh issue create` without
+  `--parent`, first body line `Intent: KEY`. Skip the intent body edits;
+  give the R-ID to slice map in the hand off instead. Add the **ready**
+  label to every slice, since there is no intent issue to carry it.
+- **Hand off** - the next step is `/build KEY`.
+- **Re-spec** - find the slices with
+  `gh issue list --search '"Intent: KEY" in:body'`, file new ones as
+  above, and swap the blocked slice **blocked -> ready** instead of the
+  intent.
+
 ## Re-spec a blocked intent
 
 When the intent already has sub-issues (`build` blocked it), amend rather

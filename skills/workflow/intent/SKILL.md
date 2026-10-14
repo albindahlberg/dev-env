@@ -62,7 +62,15 @@ investment the change deserves.
    sign in on dev`. Name the goal, not its mechanism; the body holds the
    problem. Label it `intent`.
 
-4. **Hand off** - report the issue link; the next step is `/spec #N`.
+   **Jira** - when the user names a Jira project, or `AGENTS.md` /
+   `CLAUDE.md` says intents live in Jira, file it there instead, same title
+   and body, no label (every ticket is an intent): search for duplicates
+   with `acli jira workitem search --jql`, write the body to a file, then
+   `acli jira workitem create -p KEY -t Story -s "<title>" --description-file <file>`.
+   Nothing about it goes to GitHub.
+
+4. **Hand off** - report the issue link; the next step is `/spec #N`, or
+   `/spec PROJ-123` for a Jira intent.
 
 The body always states the current intent. Later narrowing or pivots are
 scope changes, edited in per the `issue` skill.

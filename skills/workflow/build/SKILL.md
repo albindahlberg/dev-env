@@ -13,8 +13,9 @@ Nothing reaches GitHub until it has passed the **Review gate**: subagents
 build and commit locally, and the coordinator reviews, fixes and ships.
 
 An **intent** (has sub-issues from `spec`, each body with a `Stack: n/m`
-line) is built as one PR stack instead - see **Stack mode**. Stacks for
-different intents run in parallel with each other and with plain issues.
+line) is built as one PR stack instead - see **Stack mode**. So is a Jira
+key (`PROJ-123`) - see **Jira intent**. Stacks for different intents run
+in parallel with each other and with plain issues.
 
 ## Coordinator
 
@@ -179,6 +180,31 @@ lines, kept as `spec` set it.
    every sub-issue, plus the intent when all boxes were ticked.
 6. Swap the intent **working -> review**; report the stack's PR links in
    order plus findings fixed and dismissed.
+
+## Jira intent
+
+A Jira key runs **Stack mode** with these changes. Jira is read-only:
+never edit, comment on or transition the ticket.
+
+- **Read** - `acli jira workitem view KEY --json` instead of
+  `gh issue view N`. The slices are the open issues found by
+  `gh issue list --search '"Intent: KEY" in:body'`, sorted by `Stack:`;
+  they are plain issues, not sub-issues.
+- **Claim** - skip the intent claim and every intent label swap; each
+  slice is claimed in its own pipeline.
+- **Decisions branch** - `docs/intent-KEY-decisions`, adopted when it
+  exists on origin (there is no `Decisions:` line to read). Its PR gets
+  `Part of KEY` instead of `Part of #N`.
+- **Worktree** - slice branches take the key instead of `N`:
+  `feat/KEY-short-desc`.
+- **Blocked** - post the blocked comment on the slice only and tell the
+  user the stack stopped; the fix goes through `spec`'s re-spec path.
+- **Outcome gate** - tick the ticket's outcomes in the bottom PR body
+  under `## Outcomes`, with the PR that delivers each; no closing line
+  for the intent. The key in the branch names links the stack to the
+  ticket. The `closingIssuesReferences` check covers the slices only.
+- **Report** - list any unticked outcomes so the user can update the
+  ticket.
 
 This skill only sequences `issue`, `worktree`, `pr`, `commit`, `gh-stack`,
 `code-review`, `software-design` and `mattpocock-skills:tdd` - it doesn't
