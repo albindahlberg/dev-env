@@ -9,9 +9,11 @@ Take one or more issue numbers. Spawn one subagent per issue (parallel Agent
 calls in a single message). Each subagent runs the pipeline below for its
 issue only, isolated in its own worktree.
 
-An **intent** (has sub-issues from `spec`, each body with a `Stack: n/m`
-line) is built as one PR stack instead - see **Stack mode**. Stacks for
-different intents run in parallel with each other and with plain issues.
+An **intent** (has sub-issues from `spec`, each body with a `stack: n/m`
+line) is built as one PR stack instead - see **Stack mode**. So is a Jira
+key (`PROJ-123`): its slices are the open issues whose body starts with
+`intent: PROJ-123`. Stacks for different intents run in parallel with
+each other and with plain issues.
 
 ## Coordinator
 
@@ -38,7 +40,8 @@ different intents run in parallel with each other and with plain issues.
    lacks ready but was explicitly named).
 2. **Worktree** - create branch + worktree per the `worktree` skill, naming
    it from the issue's dominant change type and title, e.g.
-   `fix/N-short-desc` -> worktree `fix-N-short-desc`.
+   `fix/N-short-desc` -> worktree `fix-N-short-desc`. A slice of a Jira
+   intent takes the key instead of `N`: `feat/PROJ-123-short-desc`.
 3. **Implement**, inside that worktree:
    - Use `mattpocock-skills:tdd` where it fits, at pre-agreed seams.
    - Typecheck and run single test files regularly; full suite once at the end.
@@ -54,11 +57,14 @@ different intents run in parallel with each other and with plain issues.
 
 ## Stack mode (intent)
 
-The coordinator runs the stack; order comes from the sub-issues' `Stack:`
+The coordinator runs the stack; order comes from the sub-issues' `stack:`
 lines, never re-decided here.
 
-1. `gh issue view N` the intent, list its sub-issues, sort by `Stack:`.
-   Claim the intent (**ready -> working**).
+1. `gh issue view N` the intent, list its sub-issues, sort by `stack:`.
+   Claim the intent (**ready -> working**). Jira intent: read it with
+   `acli jira workitem view KEY --json` (read-only, never edit it), find
+   its slices with `gh issue list --search '"intent: PROJ-123" in:body'`,
+   and skip the claim; each slice is claimed in its own pipeline.
 2. One fresh subagent per sub-issue, **sequentially** - wait for each
    before spawning the next, so every agent starts with a clean context
    and the previous layers already in its base branch. Each runs the
@@ -80,9 +86,11 @@ lines, never re-decided here.
    PR that delivers it (`- [x] ... (#42)`). All ticked: put `Closes #N` in
    the top PR (GitHub doesn't close a parent when its sub-issues close).
    Any unticked: put `Part of #N` there instead and list the unticked
-   boxes in the report.
-4. Swap the intent **working -> review**; report the stack's PR links in
-   order plus findings fixed and dismissed.
+   boxes in the report. Jira intent: tick the boxes in the top PR body
+   under `## Outcomes` instead, no closing line; the key in the branch
+   names links the stack to the ticket.
+4. Swap the intent **working -> review** (skip for a Jira intent); report
+   the stack's PR links in order plus findings fixed and dismissed.
 
 ## Addressing review findings
 

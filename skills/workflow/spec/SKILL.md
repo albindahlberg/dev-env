@@ -9,6 +9,11 @@ Stage 2 of intent -> spec -> build. Input: an intent issue number (from the
 `intent` skill). Output: one or more sub-issues under it, each implementable
 by `build`.
 
+**Jira intent** - input is a Jira key instead. Jira is read-only here: read
+it with `acli jira workitem view KEY --json` and
+`acli jira workitem comment list --key KEY`, never edit it. Its slices are
+plain GitHub issues, not sub-issues, deviations below.
+
 1. **Research** - before asking anything, read the intent
    (`gh issue view N --comments`), `CLAUDE.md` / `AGENTS.md`, `CONTEXT.md`,
    existing ADRs, and the code the change touches (sub-agents for broad
@@ -25,7 +30,8 @@ by `build`.
    decision that meets domain-modeling's ADR bar as an ADR, and new terms
    in `CONTEXT.md`, as you go, not at the end. Any answer that changes the
    intent (new problem, dropped or narrowed outcome) is a scope change:
-   edit it into the intent body per the `issue` skill.
+   edit it into the intent body per the `issue` skill. Jira intent: tell
+   the user what to change in the ticket instead.
 
 3. **Write** - once the tree is empty, write the spec from the settled
    decisions:
@@ -50,8 +56,8 @@ by `build`.
    the slice with no prefix, label `spec`, body:
 
    ```md
-   Intent: #N
-   Stack: 2/4, after #a     <!-- first slice: "Stack: 1/4, base main" -->
+   intent: #N
+   stack: 2/4, after #a     <!-- first slice: "stack: 1/4, base main" -->
 
    ## Requirements
    ## Design
@@ -60,10 +66,14 @@ by `build`.
    ## Out of scope     <!-- drop if empty -->
    ```
 
+   Jira intent: `gh issue create` without `--parent`, first body line
+   `intent: PROJ-123`.
+
    Commit the ADR / `CONTEXT.md` changes (per `commit`) and link them in
    the relevant sub-issues. Add the repo's **ready** label (per the `issue`
    skill's label discovery, e.g. `agent:ready` / `agent-ready`) to the
-   intent, not the sub-issues, so `build` picks up the whole stack.
+   intent, not the sub-issues, so `build` picks up the whole stack. Jira
+   intent: add it to every slice instead.
 
 5. **Hand off** - list the sub-issue links in stack order; the next step is
-   `/build #N` (the intent).
+   `/build #N` (the intent), or `/build PROJ-123`.
