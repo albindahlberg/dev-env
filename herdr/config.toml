@@ -104,6 +104,22 @@ width = "95%"
 height = "95%"
 
 [[keys.command]]
+key = "prefix+p"
+type = "popup"
+command = 'gh pr view --web || read -r'
+description = "open current branch's PR in browser"
+width = "60%"
+height = "20%"
+
+[[keys.command]]
+key = "prefix+i"
+type = "popup"
+command = '$(dirname "$(readlink ~/.config/herdr/config.toml)")/open-intent.sh || read -r'
+description = "open the PR's intent issue in browser"
+width = "60%"
+height = "20%"
+
+[[keys.command]]
 key = "prefix+z"
 type = "plugin_action"
 command = "furkankly.zoetrope.open"
