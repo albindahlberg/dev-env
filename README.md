@@ -20,6 +20,7 @@ a link target is moved to `<target>.bak.<timestamp>`.
 | `herdr/config.toml` | `~/.config/herdr/config.toml` |
 | `tmux.conf` | `~/.tmux.conf` |
 | `pi/` | `~/.pi` |
+| `AGENTS.global.md` | `~/.claude/CLAUDE.md`, `~/.codex/AGENTS.md` (user-level agent instructions) |
 | `claude/scripts/`, `claude/hooks/*`, `claude/skills/*` | `~/.claude/...` (file by file) |
 | `claude/settings.json` | copied once to `~/.claude/settings.json`, not linked |
 | `codex/hooks/*`, `codex/skills/*` | `~/.codex/...` (file by file) |

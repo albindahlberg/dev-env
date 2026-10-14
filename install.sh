@@ -60,12 +60,14 @@ install_links() {
   }
   seed "$REPO/codex/config.toml"    "$HOME/.codex/config.toml"
   seed "$REPO/codex/hooks.json"     "$HOME/.codex/hooks.json"
+  link "$REPO/AGENTS.global.md"     "$HOME/.codex/AGENTS.md"
   # claude has two profiles (default account + ~/.claude-private, switched via
   # CLAUDE_CONFIG_DIR); both get the same repo-managed files, independently
   local cd h
   for cd in "$HOME/.claude" "$HOME/.claude-private"; do
     seed "$REPO/claude/settings.json" "$cd/settings.json"
     link "$REPO/claude/scripts" "$cd/scripts"
+    link "$REPO/AGENTS.global.md" "$cd/CLAUDE.md"
     # shared hooks/ + claude-only claude/hooks/; symlinks in claude/hooks/ just point back into hooks/
     for h in "$REPO"/hooks/* "$REPO"/claude/hooks/*; do
       [ -L "$h" ] || link "$h" "$cd/hooks/$(basename "$h")"
