@@ -120,6 +120,12 @@ width = "60%"
 height = "20%"
 
 [[keys.command]]
+key = "prefix+m"
+type = "shell"
+command = '$(dirname "$(readlink ~/.config/herdr/config.toml)")/toggle-mouse.sh'
+description = "toggle mouse capture"
+
+[[keys.command]]
 key = "prefix+z"
 type = "plugin_action"
 command = "furkankly.zoetrope.open"
