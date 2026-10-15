@@ -35,9 +35,8 @@ stack, so it scopes one change. Next stage is the `spec` skill.
    current-state visual (never a solution). In chat, render per
    `show-me`; in the issue body use the Mermaid source (GitHub renders it).
 
-3. **File** - per the `issue` skill's writing rules (duplicate search,
-   template check), except the body uses this structure instead of the
-   default feature template:
+3. **File** - per the `issue` skill's writing rules (duplicate search),
+   with this body structure:
 
    ```md
    ## Problem
