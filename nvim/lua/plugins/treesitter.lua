@@ -9,6 +9,8 @@ return {
             local parsers = {
                 "lua",
                 "python",
+                "typescript",
+                "tsx",
                 "rust",
                 "bash",
                 "yaml",

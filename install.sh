@@ -122,6 +122,8 @@ install_packages() {
     if have "$cmd"; then echo "   ok    $cmd"; else run brew install "$pkg"; fi
   done
   have prettier || { have npm && run npm install -g prettier; }
+  have tree-sitter || run brew install tree-sitter-cli
+  have tsserver || { have npm && run npm install -g typescript; }
   have claude || run bash -c 'curl -fsSL https://claude.ai/install.sh | bash'
   have herdr  || run bash -c 'curl -fsSL https://herdr.dev/install.sh | sh'
   have pi     || { have npm && run npm install -g @earendil-works/pi-coding-agent; }

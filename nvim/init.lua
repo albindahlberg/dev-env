@@ -170,4 +170,5 @@ else
 	-- Native Neovim only
 	-- ==========================================================
 	require("config.lsp")
+	require("config.model_peek")
 end
