@@ -120,6 +120,12 @@ width = "60%"
 height = "20%"
 
 [[keys.command]]
+key = "prefix+d"
+type = "shell"
+command = '$(dirname "$(readlink ~/.config/herdr/config.toml)")/peek.sh'
+description = "diff vs HEAD in a split to the right"
+
+[[keys.command]]
 key = "prefix+m"
 type = "shell"
 command = '$(dirname "$(readlink ~/.config/herdr/config.toml)")/toggle-mouse.sh'
