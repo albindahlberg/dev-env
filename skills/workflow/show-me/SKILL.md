@@ -82,6 +82,8 @@ EOF)
 
 For a file that already exists, such as a repo doc: `<skill-dir>/preview.sh < docs/x.md`.
 
+If the user asks for it "in a pane" or "in a split", write the Markdown to a file and run `"$(dirname "$(readlink ~/.config/herdr/config.toml)")/peek.sh" <file>` instead. It opens the file in nvim to the right of this pane, rendered by render-markdown.nvim. With no file it opens the working-tree diff in diffview.nvim. The pane can't draw Mermaid, so render each diagram with `mermaid-ascii --max-width <n>` and write the output as a `text` block in its place, where `<n>` is half this pane's width minus 10 (`herdr pane layout --pane "$HERDR_PANE_ID"`). If a diagram still tangles at that width, say so and offer the browser preview for it.
+
 If it prints "could not open a browser tab", say so and give the URL; don't claim the tab opened.
 
 In the chat, give the key visual rendered by `mermaid-ascii` (see above), not the Mermaid source.
