@@ -31,12 +31,16 @@ Before writing the body, look for a PR template in the project root:
 Body: concise, clear, scannable. Reviewer should grasp the change in 30s.
 No filler, no restating the diff line by line, no marketing tone.
 
-Visuals: call the Skill tool for `show-me` and add one only where the
-reviewer would otherwise have to rebuild a picture from prose. Pick the
-smallest view that makes the change clear (pseudocode, call tree,
-component tree, file tree, Mermaid, `diff` of shape, table for before/after
-or many options). Skip if prose is clearer. Inline Markdown only; no HTML
-files or previews in a PR body.
+Visuals, two steps:
+1. Always call the Skill tool for `show-me` before drafting the body, even
+   when you expect no visual.
+2. Then decide. Required when the change alters a flow, schema, data shape
+   or order of steps. Otherwise add one only where the reviewer would have
+   to rebuild a picture from prose, and skip it if prose is clearer. Pick the
+   smallest view (pseudocode, call tree, component tree, file tree, Mermaid,
+   `diff` of shape, table for before/after or many options). Reuse a visual
+   from the linked issue or spec when one fits. Inline Markdown only; no
+   HTML files or previews in a PR body.
 
 Rules:
 - no empty sections; drop headings that have nothing to say
