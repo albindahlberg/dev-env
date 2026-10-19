@@ -95,7 +95,7 @@ install_links() {
 
 # --- packages -----------------------------------------------------------
 # command:brew-formula
-BREW_PKGS="git:git nvim:neovim tmux:tmux k9s:k9s jq:jq gh:gh fzf:fzf just:just lazygit:lazygit rg:ripgrep stylua:stylua shfmt:shfmt shellcheck:shellcheck node:node delta:git-delta"
+BREW_PKGS="git:git nvim:neovim tmux:tmux k9s:k9s jq:jq gh:gh fzf:fzf just:just lazygit:lazygit rg:ripgrep stylua:stylua shfmt:shfmt shellcheck:shellcheck node:node"
 
 load_brew() {
   local b
