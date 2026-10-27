@@ -8,8 +8,8 @@ Excluded (machine-local / secret): `config.toml.bak-*`, `history.jsonl`,
 
 `skills/` holds only symlinks into `../skills/<category>/<name>` (shared with
 `claude/`, see `../AGENTS.md`) — `git/` (commit, worktree),
-`github/` (pr, issue, gh-stack), `workflow/` (skewer, skewer-w-docs, intent, spec, build, show-me, herdr), `design/` (frontend taste skills, vendored from Leonxlnx/taste-skill), `writing/` (unslop),
-`dotfiles/` (config-sync), `project-setup/` (blueprint). The category is a repo-side grouping only; the
+`github/` (pr, issue, gh-stack), `workflow/` (skewer, skewer-w-docs, intent, spec, build, show-me, herdr), `writing/` (unslop).
+The category is a repo-side grouping only; the
 symlinks here stay flat.
 
 Codex-only skills (`caveman`, `grill-me`, `tdd`) are real dirs in `skills/`

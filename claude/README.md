@@ -7,8 +7,8 @@ Excluded (machine-local / secret): `.credentials.json`, `history.jsonl`,
 
 `skills/` here holds only symlinks into `../skills/<category>/<name>` (shared
 with `codex/`, see `../AGENTS.md`) — `git/` (commit, worktree),
-`github/` (pr, issue, gh-stack), `workflow/` (skewer, skewer-w-docs, intent, spec, build, show-me, herdr), `design/` (frontend taste skills, vendored from Leonxlnx/taste-skill), `writing/` (unslop),
-`dotfiles/` (config-sync), `project-setup/` (blueprint). The category is a repo-side grouping only; the
+`github/` (pr, issue, gh-stack), `workflow/` (skewer, skewer-w-docs, intent, spec, build, show-me, herdr), `writing/` (unslop).
+The category is a repo-side grouping only; the
 symlinks here stay flat.
 
 `hooks/secret-guard.sh` symlinks into `../hooks/` (also shared with `codex/`).
