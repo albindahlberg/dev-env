@@ -45,8 +45,13 @@ design decision, and leaves each module's implementation to `build`.
    4. **Module interfaces** - once 1–3 are settled, run
       `software-design`'s Planning step 3 for each added or changed
       interface; each sketch set is one
-      question, shown via `show-me`; then the pinned interface per Planning
-      step 4.
+      question. Before asking it, call the Skill tool for `show-me` and
+      open its Markdown preview with one section per option: the
+      interface, one call site, what it hides, and the module shape
+      before and after as Mermaid, with your recommendation on top. The
+      user reads the preview and answers in the picker. Re-run the
+      preview as answers land so it always shows the current design;
+      then the pinned interface per Planning step 4.
    5. **Slicing and the rest.**
 
    Your research supplies each question's recommended option. Record each
@@ -83,9 +88,11 @@ design decision, and leaves each module's implementation to `build`.
    faster than prose, in its smallest fitting shape: module shape before
    and after, a `diff` on the call/file tree for where it lands, flow or
    sequence for data flow, the slice stack in order, a table for compared
-   options. In chat, render per `show-me`; in the issue body use the
-   Mermaid source (GitHub renders it). Show it, slice order included, and
-   wait for an explicit yes.
+   options. Put the whole draft spec in the `show-me` Markdown preview,
+   the same Markdown and Mermaid the issue bodies will use (GitHub
+   renders it); in chat give only the slice stack, rendered per
+   `show-me`. Ask for an explicit yes, and on feedback edit the draft,
+   re-run the preview and ask again.
 
 4. **File** - one sub-issue per slice, in stack order:
    `gh issue create --parent N`, writing per the `issue` skill, title
