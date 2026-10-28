@@ -31,7 +31,7 @@ Before writing the body, look for a PR template in the project root:
 Body: concise, clear, scannable. Reviewer should grasp the change in 30s.
 No filler, no restating the diff line by line, no marketing tone.
 
-Visuals, two steps:
+Visuals, three steps:
 1. Always call the Skill tool for `show-me` before drafting the body, even
    when you expect no visual.
 2. Then decide. Required when the change alters a flow, schema, data shape
@@ -41,6 +41,13 @@ Visuals, two steps:
    `diff` of shape, table for before/after or many options). Reuse a visual
    from the linked issue or spec when one fits. Inline Markdown only; no
    HTML files or previews in a PR body.
+3. Module dependencies, required whenever the diff touches code: a Mermaid
+   `graph` of each module the diff touches plus its direct callers and
+   callees, one edge per call into a module's public interface, labelled
+   with the function called. Mark added edges `==>` and removed ones
+   `-.->`; leave unchanged edges plain so the reviewer sees what moved.
+   Read the edges from the imports and calls in the diff and the touched
+   modules, so the graph shows the code as it is.
 
 Rules:
 - no empty sections; drop headings that have nothing to say
