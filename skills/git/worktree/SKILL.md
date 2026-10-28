@@ -37,3 +37,8 @@ Main session (not in a subagent): use `EnterWorktree` with the name above.
 Inside a subagent: `EnterWorktree` refuses — it won't mutate a cwd-pinned
 subagent's working directory. Use `git worktree add <dir> -b <branch>`
 directly, same naming as above.
+
+Existing branch (checking out work that's already there, e.g. a pushed
+branch): `git fetch origin <branch>`, then `git worktree add <dir> <branch>`
+without `-b`. It fails if another worktree holds the branch; remove that one
+first.
