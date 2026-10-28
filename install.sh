@@ -45,7 +45,7 @@ install_links() {
   link "$REPO/pi"                 "$HOME/.pi"
   # claude/codex: link tracked files individually; ~/.claude and ~/.codex also hold secrets and runtime state
   # hooks + deny rules (must match on every machine), config-dir paths normalized ('/home/x/.claude-private/..' == ~/.claude/..)
-  hooks_of() { jq -S --arg home "$HOME" --arg q "'" '{hooks, permissions, sandbox} | (.permissions.deny, .sandbox.filesystem.denyRead) |= (. // [] | sort) | walk(if type == "string" then gsub("\($q)?(~|\\$HOME|\($home))/\\.(claude(-private)?|codex)/(?<p>[^ \($q)]*)\($q)?"; "~/.cfg/\(.p)") else . end)' "$1"; }
+  hooks_of() { jq -S --arg home "$HOME" --arg q "'" '{hooks, permissions, sandbox} | (.permissions.deny, .sandbox.filesystem.denyRead) |= (. // [] | sort) | walk(if type == "string" then gsub("\($q)?(~|\\$HOME|\($home))/\\.(claude(-[a-z]+)?|codex)/(?<p>[^ \($q)]*)\($q)?"; "~/.cfg/\(.p)") else . end)' "$1"; }
   seed() { # seed <repo-file> <target> (settings/config: rewritten per machine, so copy once, never link)
     if [ ! -e "$2" ]; then
       run mkdir -p "$(dirname "$2")"
@@ -61,10 +61,10 @@ install_links() {
   seed "$REPO/codex/config.toml"    "$HOME/.codex/config.toml"
   seed "$REPO/codex/hooks.json"     "$HOME/.codex/hooks.json"
   link "$REPO/AGENTS.global.md"     "$HOME/.codex/AGENTS.md"
-  # claude has two profiles (default account + ~/.claude-private, switched via
-  # CLAUDE_CONFIG_DIR); both get the same repo-managed files, independently
-  local cd h
-  for cd in "$HOME/.claude" "$HOME/.claude-private"; do
+  # claude has one profile per account (~/.claude default, the rest switched via
+  # CLAUDE_CONFIG_DIR, see zsh/claude-profiles.zsh); all get the same repo-managed files, independently
+  local cd h claude_dirs=("$HOME/.claude" "$HOME/.claude-private" "$HOME/.claude-pmck")
+  for cd in "${claude_dirs[@]}"; do
     seed "$REPO/claude/settings.json" "$cd/settings.json"
     link "$REPO/claude/scripts" "$cd/scripts"
     link "$REPO/AGENTS.global.md" "$cd/CLAUDE.md"
@@ -79,7 +79,7 @@ install_links() {
   # skills/ is organized by category (skills/<category>/<name>); tools want a flat skills dir, so link by basename
   local s
   for s in "$REPO"/skills/*/*/; do
-    for cd in "$HOME/.claude" "$HOME/.claude-private"; do
+    for cd in "${claude_dirs[@]}"; do
       link "${s%/}" "$cd/skills/$(basename "$s")"
     done
     link "${s%/}" "$HOME/.codex/skills/$(basename "$s")"
@@ -144,6 +144,10 @@ post() {
     run git config --global --add 'includeIf.gitdir:~/albindahlberg/.path' "$inc"
   line="source \"$REPO/zsh/gh-account.zsh\""
   if [ -f "$HOME/.zshrc" ] && ! grep -qF "zsh/gh-account.zsh" "$HOME/.zshrc"; then
+    if [ "$DRY" = 1 ]; then echo "   [dry] append to ~/.zshrc: $line"; else printf '\n%s\n' "$line" >> "$HOME/.zshrc"; fi
+  fi
+  line="source \"$REPO/zsh/claude-profiles.zsh\""
+  if [ -f "$HOME/.zshrc" ] && ! grep -qF "zsh/claude-profiles.zsh" "$HOME/.zshrc"; then
     if [ "$DRY" = 1 ]; then echo "   [dry] append to ~/.zshrc: $line"; else printf '\n%s\n' "$line" >> "$HOME/.zshrc"; fi
   fi
   # restore = install exactly what lazy-lock.json pins
