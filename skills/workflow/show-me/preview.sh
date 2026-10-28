@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Render Markdown from stdin in the browser via markdown-preview.nvim.
+# Render Markdown from stdin in the browser via mdkite.nvim.
 # One file, server and port per agent session, so parallel agents never
 # overwrite each other's preview. Always opens a tab: the plugin's own
 # browser launch is unreliable under WSL.
@@ -18,8 +18,8 @@ if ! pgrep -f "^nvim --headless $f" >/dev/null; then
   nohup timeout 30m nvim --headless "$f" \
     -c 'set autoread' \
     -c 'call timer_start(1000, {-> execute("checktime")}, {"repeat": -1})' \
-    -c "lua require('markdown_preview').setup({ instance_mode = 'multi', port = $port, open_browser = false })" \
-    -c MarkdownPreview >/dev/null 2>&1 &
+    -c "lua require('mdkite').setup({ instance_mode = 'multi', port = $port, open_browser = false })" \
+    -c MdKite >/dev/null 2>&1 &
   for _ in $(seq 50); do curl -s -o /dev/null "$u" && break; sleep 0.1; done
 fi
 

@@ -302,7 +302,7 @@ if not vim.g.vscode then
 		silent = true,
 	})
 
-	vim.keymap.set("n", "<leader>mp", "<cmd>MarkdownPreview<CR>", { desc = "Markdown preview" })
+	vim.keymap.set("n", "<leader>mp", "<cmd>MdKite toggle<CR>", { desc = "Markdown preview" })
 
 	-- global typos (apply everywhere)
 	vim.cmd("iabbrev teh the")
