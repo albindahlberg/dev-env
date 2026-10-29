@@ -24,11 +24,13 @@ design decision, and leaves each module's implementation to `build`.
    - **Design health** - each touched module judged fit to build on, or
      the prefactor it needs first, with the red flags and co-change evidence.
    - **Open decisions** - which module interfaces the change adds or
-     changes, which module owns each, data flow, how to slice it, each
-     with your recommended answer.
+     changes, which module owns each, data flow, how to slice it. Each
+     with the real options, the tradeoff between them (what each buys
+     and costs in complexity, performance, risk, migration effort and
+     how hard it is to reverse), and your recommended answer.
 
    Done when every touched module has a design-health verdict and every
-   open decision a recommended answer.
+   open decision its options, their tradeoffs and a recommended answer.
 
 2. **Grill** - first create the decisions worktree:
    `git worktree add <dir> -b docs/intent-N-decisions`, N the intent's
@@ -47,17 +49,20 @@ design decision, and leaves each module's implementation to `build`.
       interface; each sketch set is one
       question. Before asking it, call the Skill tool for `show-me` and
       open its Markdown preview with one section per option: the
-      interface, one call site, what it hides, and the module shape
-      before and after as Mermaid, with your recommendation on top. The
+      interface, one call site, what it hides, what it buys and costs,
+      and the module shape before and after as Mermaid. On top, a table
+      comparing the options on those tradeoffs and your recommendation
+      with the tradeoff it accepts. The
       user reads the preview and answers in the picker. Re-run the
       preview as answers land so it always shows the current design;
       then the pinned interface per Planning step 4.
    5. **Slicing and the rest.**
 
-   Your research supplies each question's recommended option. Record each
+   Your research supplies each question's recommended option, and each
+   question states the tradeoff it decides. Record each
    resolved decision that meets domain-modeling's ADR bar as an ADR, and
-   rejected interface alternatives below that bar in the slice's
-   `## Decisions`; new terms go in
+   rejected alternatives below that bar in the slice's `## Decisions`,
+   each with the tradeoff that ruled it out; new terms go in
    `CONTEXT.md` (domain-modeling's glossary format, but always this
    file), as you go, not at the end. Any answer that changes the
    intent (new problem, dropped or narrowed outcome) is a scope change:
@@ -69,7 +74,8 @@ design decision, and leaves each module's implementation to `build`.
      tracing to a line of the intent and stated so it can be checked.
      Slices, acceptance criteria and reviews cite them by ID. Each of the
      intent's open questions is answered here or carried forward as one.
-   - **Design** - as decided in the grill.
+   - **Design** - as decided in the grill, naming the tradeoffs it
+     accepts.
    - **Interface** - per slice, the owning module, its pinned interface and the
      interfaces tests go through, from
      `software-design`'s Planning step 4.
