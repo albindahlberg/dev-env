@@ -63,8 +63,13 @@ investment the change deserves.
    problem. Label it `intent`.
 
    **Jira** - when the user names a Jira project, or `AGENTS.md` /
-   `CLAUDE.md` says intents live in Jira, file it there instead, same title
-   and body, no label (every ticket is an intent): search for duplicates
+   `CLAUDE.md` says intents live in Jira, file it there instead, no label
+   (every ticket is an intent). Write the title and body in Swedish, and
+   draft them in Swedish at **Confirm** so the yes covers the filed text.
+   Same title rule, e.g. `Byt webbappen till Keycloak-klienten för
+   produktion`. Headings: `## Problem`, `## Önskat utfall`,
+   `## Berörda användare och system`, `## Begränsningar`,
+   `## Öppna frågor`. Search for duplicates
    with `acli jira workitem search --jql`, write the body to a file, then
    `acli jira workitem create -p KEY -t Story -s "<title>" --description-file <file>`.
    Nothing about it goes to GitHub.

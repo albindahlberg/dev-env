@@ -199,7 +199,8 @@ never edit, comment on or transition the ticket.
   `feat/KEY-short-desc`.
 - **Blocked** - post the blocked comment on the slice only and tell the
   user the stack stopped; the fix goes through `spec`'s re-spec path.
-- **Outcome gate** - tick the ticket's outcomes in the bottom PR body
+- **Outcome gate** - the outcomes are the ticket's `## Önskat utfall`
+  boxes. Tick them in the bottom PR body
   under `## Outcomes`, with the PR that delivers each; no closing line
   for the intent. The key in the branch names links the stack to the
   ticket. The `closingIssuesReferences` check covers the slices only.
