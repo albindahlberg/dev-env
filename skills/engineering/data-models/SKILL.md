@@ -49,11 +49,14 @@ table, or to the project's own pattern.
 - **Make illegal states unrepresentable.** A value that is one of several
   cases is a union of variants, each holding only its own fields, branched on
   with an exhaustive match. A record whose mode depends on which fields are
-  null is a union in disguise.
+  null is a union in disguise. Split it when a caller branches on the mode
+  and then relies on a field being set. Keep it flat when no caller branches
+  on it, or when the cases differ by one optional field.
 - **Rows stay behind the repository.** A table is flat, so its row type has
   nullable columns that only hold at some statuses. The module that owns
-  the table converts each row to a domain type at its interface, as
-  variants when fields depend on a status, and returns only that.
+  the table converts each row to a domain type at its interface and returns
+  only that. The domain type is variants only when the rule above calls for
+  it; otherwise it mirrors the row.
 - **One source of truth per shape.** Derive the static type from the schema
   (or the schema from the type) rather than writing both.
 - **Immutable by default** for values that cross a module interface; make
