@@ -55,7 +55,9 @@ design decision, and leaves each module's implementation to `build`.
       with the tradeoff it accepts. The
       user reads the preview and answers in the picker. Re-run the
       preview as answers land so it always shows the current design;
-      then the pinned interface per Planning step 4.
+      then the pinned interface per Planning step 4. Settle its error
+      modes and hard cases here, as questions where the behaviour is a
+      choice, so `## Tests` only restates what was decided.
    5. **Slicing and the rest.**
 
    Your research supplies each question's recommended option, and each
@@ -72,13 +74,23 @@ design decision, and leaves each module's implementation to `build`.
    decisions:
    - **Requirements** - numbered `R1`, `R2`, ... across the intent, each
      tracing to a line of the intent and stated so it can be checked.
-     Slices, acceptance criteria and reviews cite them by ID. Each of the
+     Slices, test scenarios and reviews cite them by ID. Each of the
      intent's open questions is answered here or carried forward as one.
    - **Design** - as decided in the grill, naming the tradeoffs it
      accepts.
    - **Interface** - per slice, the owning module, its pinned interface and the
      interfaces tests go through, from
      `software-design`'s Planning step 4.
+   - **Tests** - per slice, the scenarios that matter most, grouped
+     under the interfaces **Interface** names for tests, so a reviewer
+     can see at spec time that the right behaviour will be tested. Like the interface, this
+     pins the important bits and leaves the rest to `build`: a scenario
+     may take several tests, and `build` adds whatever else the
+     implementation needs. Each is a plain line: the situation, what a
+     caller sees, and the R-IDs it supports. Lead with the main path,
+     then the edge cases the interface pins (invariants, error modes,
+     hard cases such as retries, idempotency or partial failure).
+     Behaviour, not test names or code.
    - **Slices** - small incremental changes, one PR each, that together
      form one PR stack closing the intent. Each must be coherent and green
      on its own, and lists the requirement IDs it delivers; every ID lands
@@ -111,7 +123,7 @@ design decision, and leaves each module's implementation to `build`.
    ## Requirements     <!-- the R-IDs this slice delivers, verbatim -->
    ## Design
    ## Interface        <!-- the pinned interface, per software-design's Planning step 4 -->
-   ## Acceptance criteria   <!-- each cites its R-ID -->
+   ## Tests          <!-- key scenarios per interface, with R-IDs; not exhaustive -->
    ## Open questions   <!-- carried forward; drop if empty -->
    ## Decisions        <!-- ADR links, resolved concerns -->
    ## Out of scope     <!-- drop if empty -->

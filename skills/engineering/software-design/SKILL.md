@@ -236,7 +236,7 @@ reasoning that produced it.
    flag against every changed module and its callers, and return each hit
    as: flag, `file:line`, mechanical or judgement, the fix. With a spec
    issue it also checks the code matches `## Interface` (a mismatch is a
-   hit to fix, citing the interface element) and that each requirement ID and acceptance criterion is
+   hit to fix, citing the interface element) and that each requirement ID is
    met (an unmet one is a hit to fix, citing its ID). Done when every
    flag, and with a spec every interface element and requirement ID, is
    marked hit or clear.

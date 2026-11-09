@@ -51,19 +51,24 @@ different intents run in parallel with each other and with plain issues.
      with what broke, so the fix lands in the spec.
    - Use `mattpocock-skills:tdd` where it fits. Tests go through the
      interfaces `## Interface` lists for them; with no `## Interface`,
-     pick them yourself and list them in the hand back. Each test pins
+     pick them yourself and list them in the hand back. Cover every
+     scenario in `## Tests`, with as many tests as it takes, and add
+     whatever else the implementation needs. A scenario that turns out
+     wrong takes the blocked path when fixing it changes a requirement;
+     otherwise refine or drop it and return it for the PR's Notes, with
+     why. Each test pins
      one behaviour a caller relies on, using the real implementation
      behind the interface; a fake stands in only for a dependency the
      module doesn't own (network, vendor, clock). Domain terms live in
      `CONTEXT.md`.
    - Typecheck and run single test files regularly; full suite once at the end.
-   - Done when lint, typecheck and the full suite are green and each acceptance criterion has
-     a behaviour test through the interface that fails without the
-     change.
+   - Done when lint, typecheck and the full suite are green and each
+     requirement ID in the issue has a behaviour test through the
+     interface that fails without the change.
    - Leave reviews to the coordinator.
    - Commit to the branch (per `commit`).
 4. **Hand back** - return the branch name and worktree path with the branch
-   committed and unpushed.
+   committed and unpushed, plus any refined or dropped scenarios.
 5. **Blocked/failure** - follow the `issue` skill's blocked path: post the
    blocked comment, swap **working -> blocked**, stop this subagent without
    touching the others.
@@ -107,7 +112,8 @@ Runs in the coordinator, in the branch's worktree, after the Review gate.
 1. Push the branch and open the PR **as draft** (`gh pr create --draft`),
    title/body per the `pr` skill, body includes `Closes #N`. List each
    judgement flag in the body's Notes with its `file:line` and trade-off,
-   written as an open design question. The PR describes the change, never
+   written as an open design question, and each refined or dropped
+   scenario with why. The PR describes the change, never
    the review.
 2. Swap the issue label **working -> review** (`issue` skill), comment on
    the issue with the PR link.
@@ -151,7 +157,8 @@ lines, kept as `spec` set it.
       stacked PRs, `git push` the branch and
       `gh pr create --draft --base <layer below>` instead.
    2. `gh pr edit` the layer's PR title/body per `pr`, with
-      `Closes #<sub-issue>` and the judgement flags in Notes.
+      `Closes #<sub-issue>`, and the judgement flags and scenario
+      changes in Notes.
    3. If this layer isn't the bottom, also add `Closes #<sub-issue>` to
       the bottom PR's body. The stack merges in one go and GitHub only
       reads closing keywords from the PR into the default branch, so the
