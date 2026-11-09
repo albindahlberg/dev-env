@@ -25,9 +25,9 @@ table, or to the project's own pattern.
 | The data is | Python | TypeScript |
 |---|---|---|
 | JSON passed through unread, even if another tool owns its schema | `dict` | `unknown` |
-| A shape another tool owns that the code reads by fixed keys | `TypedDict`, validated at load | `interface`, validated at load |
+| A shape another tool owns that the code reads by fixed keys | `TypedDict`, validated at load | `type`, validated at load |
 | A true mapping (arbitrary keys, lookup table) | `dict` or a specialised container | `Record<K, V>` when serialised, else `Map` |
-| An internal record with fixed fields | `@dataclass(frozen=True)` | `interface` with `readonly` fields |
+| An internal record with fixed fields | `@dataclass(frozen=True)` | `type` with `readonly` fields |
 | A small immutable record unpacked positionally | `NamedTuple` | labelled `readonly` tuple |
 | A closed set of plain tags | `Literal[...]` | string literal union |
 | A closed set with per-member data, an order, or use across modules | `StrEnum` / `Enum` | `as const` object + derived union |

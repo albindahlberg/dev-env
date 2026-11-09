@@ -19,17 +19,31 @@ them only when the issue asks.
   properties (`constructor(public x: number)`) and `import =`. The patterns
   below already use only erasable syntax.
 
-## interface vs type
+## type vs interface
 
-The handbook's heuristic: "use `interface` until you need to use features
-from `type`". An `interface` names object shapes and extends with `extends`,
-which the compiler checks faster than `&` and shows by name in errors. Use
-`type` for unions, tuples, mapped and conditional types, and aliases of
-primitives.
+Data shapes are `type` aliases: records, variants, wire and config shapes.
+One keyword covers unions, tuples and mapped types, so a record that grows
+into a union keeps its declaration; an alias can't be reopened by a
+same-named declaration elsewhere; and an object `type` is assignable to
+`Record<string, unknown>`, which JSON and logging helpers take.
+
+`interface` is for its strengths:
+
+- **Contracts** a class implements or a caller supplies (a port, a
+  repository, a callback set). See [Contracts](#contracts).
+- **Extension hierarchies**: one shape built on another with `extends`,
+  which the compiler checks faster than `&`, reports conflicting
+  properties instead of silently producing `never`, and names in errors.
+- **Augmentation**: adding to a library's or a global type through
+  declaration merging (`declare module`, `Window`).
+
+The handbook's own heuristic leans the other way ("use `interface` until
+you need to use features from `type`"); a project that follows it keeps
+it, per step 1 of the skill.
 
 ## Records
 
-An internal record is an `interface` with `readonly` fields. `readonly` and
+An internal record is a `type` with `readonly` fields. `readonly` and
 `Readonly<T>` stop reassignment only at type-check time and are shallow, so
 collection fields are `readonly T[]`, `ReadonlyMap` or `ReadonlySet`. Make
 changed copies with spread: `{ ...file, stored }`.
@@ -67,9 +81,9 @@ A value that is one of several cases is a discriminated union: each member
 has a literal `kind` and only its own fields.
 
 ```ts
-interface Shared { readonly kind: "shared"; readonly objects: ReadonlyMap<FileFormat, DataFileObject> }
-interface ViaGdr { readonly kind: "gdr"; readonly client: GdrUploadClient }
-interface Direct { readonly kind: "direct"; readonly bucket: Bucket }
+type Shared = { readonly kind: "shared"; readonly objects: ReadonlyMap<FileFormat, DataFileObject> };
+type ViaGdr = { readonly kind: "gdr"; readonly client: GdrUploadClient };
+type Direct = { readonly kind: "direct"; readonly bucket: Bucket };
 type DataFileUpload = Shared | ViaGdr | Direct;
 
 function describe(upload: DataFileUpload): string {
