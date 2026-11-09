@@ -1,68 +1,49 @@
----
-name: python-data-models
-description: Choose Python data structures and models. Use when writing or refactoring Python that defines a record, a fixed set of values, a JSON/config shape, input validation, settings, a container, or an interface.
----
-
 # Python data models
 
-1. **Match the project first.** Look for how the project already models the
-   same kind of data: pydantic, attrs, msgspec, SQLAlchemy/Django models, or a
-   style guide. Follow what's there. Use the rest of this skill only where the
-   project has no pattern of its own.
-2. **Check the version floor.** Read `requires-python`, and assume 3.13 if it's
-   absent. Features newer than the floor are marked below.
-3. **Pick by what the data is**, using the table:
-
-| The data is | Use |
-|---|---|
-| JSON passed through unread, even if another tool owns its schema | `dict` |
-| A dict shape another tool owns that the code reads by fixed keys | `TypedDict`, validated at load ([TypedDict](#typeddict)) |
-| A true mapping (arbitrary keys, lookup table) | `dict`, or a specialised container ([CONTAINERS.md](CONTAINERS.md)) |
-| An internal record with fixed fields | `@dataclass` |
-| A small immutable record that is unpacked or returned positionally | `NamedTuple` |
-| A closed set of plain tags | `Literal[...]` |
-| A closed set with per-member data, an order, or use across modules | `StrEnum` / `Enum` |
-| Combinable options | `enum.Flag` with `auto()` values |
-| External input the code relies on (API bodies, user-edited config) | pydantic `BaseModel` if present or the shape is nested; else `@dataclass` + `__post_init__` |
-| Settings from env vars or `.env` | `pydantic-settings` `BaseSettings` if present; else `@dataclass` from `os.environ` |
-| A contract that other code satisfies | `Protocol` |
+**Version floor.** Read `requires-python`, and assume 3.13 if it's absent.
+Features newer than the floor are marked below.
 
 For containers and typing helpers (`defaultdict`, `Counter`, `deque`,
 `ChainMap`, `frozenset`, `Mapping` vs `dict` in signatures, `NewType`, `Final`,
-`type` aliases), read [CONTAINERS.md](CONTAINERS.md).
+`type` aliases), read [PYTHON-CONTAINERS.md](PYTHON-CONTAINERS.md).
 
 ## dict vs record
 
 A dict with fixed string keys inside the program, such as `r["status"]` or a
 `blank()` factory that returns a dict, is a record, so make it a dataclass.
 A dict that only passes through the program, read or forwarded without the
-code depending on its shape, stays a dict. A wrapper around a schema that
-someone else owns only adds conversion code that drifts. External data that
-the code depends on is validated at the edge (see pydantic below).
+code depending on its shape, stays a dict. External data that the code
+depends on is validated at the edge (see pydantic below).
 
 ## dataclass
 
-The default is plain `@dataclass`. Add flags when a rule below applies:
+A record that crosses a module interface is `@dataclass(frozen=True)`; plain
+`@dataclass` is for state one module owns and mutates. Add flags when a rule
+below applies:
 
-- `frozen=True` when instances are dict keys or set members, or are passed to
-  code that must not change them. Hashing needs every field to be hashable, so
-  use `tuple` or `frozenset` fields, not `list` or `set`.
+- Frozen instances used as dict keys or set members need every field
+  hashable, so use `tuple` or `frozenset` fields, not `list` or `set`.
 - `slots=True` when you expect more than about 10k live instances. It's
   incompatible with `cached_property`, and a class can't inherit from two
   slotted bases.
 - `kw_only=True` when two or more adjacent fields share a type and could be
-  passed in the wrong order.
+  passed in the wrong order. `kw_only` fields drop out of `__match_args__`,
+  so `match` captures them by keyword: `case Shared(objects=o)`.
 - `order=True` when instances get sorted by their fields in declaration order.
 
 Other tools:
 
-- Put mutable defaults in `field(default_factory=list)`.
-- Use `field(init=False)` for derived fields that `__post_init__` sets.
+- Use `field(init=False)` for derived fields that `__post_init__` sets. In a
+  frozen dataclass, set them with `object.__setattr__(self, "x", v)`, or
+  compute them in a classmethod constructor instead.
 - Validate invariants in `__post_init__`, raising `ValueError`.
 - Make changed copies with `dataclasses.replace(obj, x=1)`.
-- `dataclasses.asdict` recursively deep-copies, so for JSON use
-  `json.dumps(asdict(obj))`. For a shallow dict, use
+- `dataclasses.asdict` recursively deep-copies. For a shallow dict, use
   `{f.name: getattr(obj, f.name) for f in fields(obj)}`.
+- `json.dumps(asdict(obj))` fails on `datetime`, `Decimal`, `Path`, `set` and
+  `frozenset`, and loading back doesn't rebuild nested dataclasses. For a JSON
+  round trip, use `TypeAdapter(Cls).dump_json(obj)` and
+  `.validate_json(raw)` when pydantic is present; keep datetimes tz-aware.
 
 ## NamedTuple
 
@@ -112,6 +93,38 @@ Branch on enums and Literals with `match`, and end it with
 Keys that are only looked up, never iterated or given attributes, stay plain
 `str`.
 
+## Variants
+
+A value that is one of several cases, each with its own fields, is a union of
+frozen dataclasses. Each case holds only the fields it needs, so no field is
+`None` because of the mode.
+
+```python
+@dataclass(frozen=True)
+class Shared:
+    objects: Mapping[FileFormat, DataFileObject]
+
+@dataclass(frozen=True)
+class ViaGdr:
+    client: GdrUploadClient
+
+@dataclass(frozen=True)
+class Direct:
+    bucket: Bucket
+
+type DataFileUpload = Shared | ViaGdr | Direct
+
+match upload:
+    case Shared(objects): ...
+    case ViaGdr(client): ...
+    case Direct(bucket): ...
+    case _: assert_never(upload)
+```
+
+The `type` statement is 3.12+; below that, use `TypeAlias`. Keep the
+variants private and expose a constructor when callers only pass the value
+along; export them when callers branch on them.
+
 ## TypedDict
 
 Use a TypedDict when a dict shape that stays a dict is read in several places
@@ -139,6 +152,9 @@ objects inward.
 - Set `model_config = ConfigDict(extra="forbid")` when an unknown key means a
   typo, as it does in user-edited config. The default silently drops unknown
   keys.
+- Model external variants as a tagged union: each model has a `Literal` tag
+  field, joined with `Annotated[A | B, Field(discriminator="kind")]`.
+  pydantic then validates only the tagged member and names the tag in errors.
 - Annotate model fields with concrete `list` and `tuple`, not `Sequence`.
 
 If `pydantic-settings` is already a dependency, load settings from env vars or

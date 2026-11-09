@@ -42,6 +42,8 @@ different intents run in parallel with each other and with plain issues.
    it from the issue's dominant change type and title, e.g.
    `fix/N-short-desc` -> worktree `fix-N-short-desc`.
 3. **Build**, inside that worktree:
+   - When the issue touches Python or TypeScript, follow `data-models` for
+     every data shape it adds or changes.
    - Follow `software-design`'s Steps for each module the issue touches:
      the interface first, then the implementation behind it. With an
      `## Interface`, write that interface exactly as pinned, its one-line

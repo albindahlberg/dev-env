@@ -22,7 +22,9 @@ real record, use a dataclass.
 
 - Accept the abstract type and return the concrete one. Parameters take
   `Mapping`, `Sequence` or `Iterable` from `collections.abc`, and returns give
-  `dict`, `list` or `tuple`.
+  `dict`, `list` or `tuple`. A bare `str` is a `Sequence[str]` and an
+  `Iterable[str]`, so where one string would be a bug, take
+  `list[str] | tuple[str, ...]`.
 - Use builtin generics such as `list[int]` and `dict[str, X]`, and write
   unions as `X | None`.
 
@@ -36,3 +38,5 @@ real record, use a dataclass.
   3.12, use `Pairs: TypeAlias = ...`, which has been deprecated since 3.12.
 - `Self` (3.11+) as the return type of fluent methods and alternative
   constructors.
+- `@override` (3.12+) on methods that override a base class, and `TypeIs`
+  (3.13+) for functions that narrow their argument's type.
