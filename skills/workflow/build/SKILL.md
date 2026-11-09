@@ -152,17 +152,23 @@ lines, kept as `spec` set it.
       `gh pr create --draft --base <layer below>` instead.
    2. `gh pr edit` the layer's PR title/body per `pr`, with
       `Closes #<sub-issue>` and the judgement flags in Notes.
-   3. **Ship**'s step 2 for the sub-issue.
+   3. If this layer isn't the bottom, also add `Closes #<sub-issue>` to
+      the bottom PR's body. The stack merges in one go and GitHub only
+      reads closing keywords from the PR into the default branch, so the
+      layer's own `Closes` never fires.
+   4. **Ship**'s step 2 for the sub-issue.
 
    The next layer starts only after, so each layer builds on
    reviewed code.
 4. **Outcome gate** - check every Proposed outcome box of the intent
    against the shipped stack and tick each one delivered, appending the
    PR that delivers it (`- [x] ... (#42)`). All ticked: put `Closes #N` in
-   the top PR (GitHub doesn't close a parent when its sub-issues close).
+   the bottom PR (GitHub doesn't close a parent when its sub-issues close).
    Any unticked: put `Part of #N` there instead and list the unticked
    boxes in the report.
-5. Swap the intent **working -> review**; report the stack's PR links in
+5. Check that `gh pr view <bottom PR> --json closingIssuesReferences` lists
+   every sub-issue, plus the intent when all boxes were ticked.
+6. Swap the intent **working -> review**; report the stack's PR links in
    order plus findings fixed and dismissed.
 
 This skill only sequences `issue`, `worktree`, `pr`, `commit`, `gh-stack`,
