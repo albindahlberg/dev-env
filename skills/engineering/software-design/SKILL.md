@@ -63,7 +63,8 @@ interface and leaves the implementation to the builder.
 4. **Pin the winner** as the slice's interface: the owning module, the
    signatures with one call site, the types crossing the interface, invariants
    and ordering, error modes, and which module absorbs each hard case
-   (retries, idempotency, partial failure). Name the interfaces tests go
+   (retries, idempotency, partial failure). Name every public element per
+   [NAMING.md](NAMING.md)'s Choosing a public name. Name the interfaces tests go
    through, as few and as high as possible, each with what it catches.
    Write one sentence describing it from the caller's side; a sentence
    that needs "and" or caveats sends it back to step 3. A new layer's
@@ -93,7 +94,7 @@ rather than being redrawn mid-build.
 4. **Place the code** by the [Placement](#placement) rules and the
    [Module structure](#module-structure).
 5. **Check the change** against the [Self-check](#self-check) and every
-   flag in [RED-FLAGS.md](RED-FLAGS.md). Every question answered and every
+   flag in [RED-FLAGS.md](RED-FLAGS.md) and [NAMING.md](NAMING.md). Every question answered and every
    flag checked; a hit is fixed or called out in the reply.
 
 The change touches background jobs, events, persistence, transactions or a
@@ -232,7 +233,7 @@ reasoning that produced it.
 2. **Dispatch** one `general-purpose` subagent with only the diff target,
    the repo path and this skill's directory. Leave out the builder's plan
    and reasoning; when the work has a spec issue, include its number. Tell
-   it to read `SKILL.md` and `RED-FLAGS.md`, run the Self-check and every
+   it to read `SKILL.md`, `RED-FLAGS.md` and `NAMING.md`, run the Self-check and every
    flag against every changed module and its callers, and return each hit
    as: flag, `file:line`, mechanical or judgement, the fix. With a spec
    issue it also checks the code matches `## Interface` (a mismatch is a

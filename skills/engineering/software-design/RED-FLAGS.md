@@ -120,26 +120,8 @@ trade-off. In `build` they are always surfaced, never fixed.
 
 ## Naming and documentation
 
-### Vague name · mechanical
-
-- **Looks like**: `data`, `info`, `result`, `manager`, `handle`, `tmp`,
-  `obj` for anything with a meaningful scope. A name that admits a wrong
-  meaning.
-- **Detect**: read each new name alone and ask what it could be mistaken
-  for.
-- **Fix**: rename to something precise and consistent with the rest of the
-  module.
-- **Fine when**: the scope is a few lines (a loop index, a lambda argument).
-
-### Hard to pick a name · judgement
-
-- **Looks like**: names with `And`/`Or`, `Utils`, `Helper`, `Processor`,
-  `Common`, or a name that needs a long qualifier.
-- **Detect**: those words in new names; a name that took several tries.
-- **Fix**: the thing does more than one job or is not one concept. Split
-  it, or move its parts to their owners, until a precise name fits.
-- **Fine when**: it is one concept with an established long name in the
-  domain.
+Name choice and the naming flags live in [NAMING.md](NAMING.md); run them
+with the rest.
 
 ### Hard to describe · judgement
 
@@ -147,7 +129,7 @@ trade-off. In `build` they are always surfaced, never fixed.
   needs "and", caveats, or the internals.
 - **Detect**: write one sentence for each new public function or module,
   saying what it does for its caller.
-- **Fix**: as for hard to name: split or reshape until one sentence holds.
+- **Fix**: split or reshape until one sentence holds.
 - **Fine when**: never; a short accurate description is always possible
   for a clean abstraction.
 
