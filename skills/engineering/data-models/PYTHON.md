@@ -121,6 +121,23 @@ match upload:
     case _: assert_never(upload)
 ```
 
+A SQLAlchemy or Django row whose columns depend on a status is converted to
+variants in the repository, so callers branch on the variant instead of
+checking `status` and then trusting a nullable column:
+
+```python
+def _to_job(row: JobRow) -> Job:
+    match row.status:
+        case JobStatus.QUEUED:
+            return Queued(row.id, row.created_at)
+        case JobStatus.DONE if row.plain_result_key is not None:
+            return Done(row.id, row.plain_result_key)
+        case JobStatus.FAILED if row.failure_reason is not None:
+            return Failed(row.id, row.failure_reason)
+        case _:
+            raise ValueError(f"job {row.id}: {row.status} row breaks its invariant")
+```
+
 The `type` statement is 3.12+; below that, use `TypeAlias`. Keep the
 variants private and expose a constructor when callers only pass the value
 along; export them when callers branch on them.

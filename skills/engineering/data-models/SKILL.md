@@ -36,6 +36,7 @@ table, or to the project's own pattern.
 | External input the code relies on (API bodies, user-edited config) | pydantic `BaseModel` | zod schema + `z.infer` |
 | Settings from env vars or `.env` | `BaseSettings` or a dataclass | zod schema over `process.env` |
 | A contract that other code satisfies | `Protocol` | `interface` |
+| A database row | the project's ORM model, kept in its module | the project's ORM type, kept in its module |
 
 ## Rules in every language
 
@@ -49,6 +50,10 @@ table, or to the project's own pattern.
   cases is a union of variants, each holding only its own fields, branched on
   with an exhaustive match. A record whose mode depends on which fields are
   null is a union in disguise.
+- **Rows stay behind the repository.** A table is flat, so its row type has
+  nullable columns that only hold at some statuses. The module that owns
+  the table converts each row to a domain type at its interface, as
+  variants when fields depend on a status, and returns only that.
 - **One source of truth per shape.** Derive the static type from the schema
   (or the schema from the type) rather than writing both.
 - **Immutable by default** for values that cross a module interface; make

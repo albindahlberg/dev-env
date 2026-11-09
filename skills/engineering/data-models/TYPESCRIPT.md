@@ -104,6 +104,10 @@ error. Where typescript-eslint runs with type information, enable
 `@typescript-eslint/switch-exhaustiveness-check` to catch the same thing
 across every switch.
 
+A Prisma, Drizzle or other ORM row whose columns depend on a status is
+converted to a discriminated union in the module that owns the table; the
+rest of the code never sees the row type.
+
 ## Typed tables and config
 
 Check a literal against a type with `satisfies`, which keeps the object's
