@@ -6,8 +6,8 @@ description: 'Implement one or more GitHub issues in parallel, each in its own w
 # Build
 
 Take one or more issue numbers. Spawn one subagent per issue (parallel Agent
-calls in a single message). Each subagent runs the pipeline below for its
-issue only, isolated in its own worktree.
+calls in a single message). Each subagent runs [SUBAGENT.md](SUBAGENT.md)
+for its issue only, isolated in its own worktree.
 
 Nothing reaches GitHub until it has passed the **Review gate**: subagents
 build and commit locally, and the coordinator reviews, fixes and ships.
@@ -24,56 +24,34 @@ different intents run in parallel with each other and with plain issues.
 2. Discover (and create missing) status labels per the `issue` skill here,
    once, so subagents don't race.
 3. Launch remaining issues as parallel `general-purpose` subagents, one per
-   issue, single message, multiple Agent tool calls. Give each subagent the
-   issue number and this skill's steps — it has no memory of this
-   conversation.
+   issue, single message, multiple Agent tool calls. Each gets the
+   **Brief** below and nothing else.
 4. As each subagent hands back its branch, run the **Review gate** on it,
    then **Ship** it.
 5. Report one final summary: per issue, PR link plus findings fixed and
    dismissed, or blocked/skip reason. Don't repeat subagent tool output.
 
-## Per-issue pipeline (subagent)
+## Brief
 
-1. **Claim** - `gh issue view N` to read title/body/comments. Follow the
-   `issue` skill's "Working an issue" section: discover the repo's status
-   labels, swap **ready -> working** (or just add working if the issue
-   lacks ready but was explicitly named).
-2. **Worktree** - create branch + worktree per the `worktree` skill, naming
-   it from the issue's dominant change type and title, e.g.
-   `fix/N-short-desc` -> worktree `fix-N-short-desc`.
-3. **Build**, inside that worktree:
-   - When the issue touches Python or TypeScript, follow `data-models` for
-     every data shape it adds or changes.
-   - Follow `software-design`'s Steps for each module the issue touches:
-     the interface first, then the implementation behind it. With an
-     `## Interface`, write that interface exactly as pinned, its one-line
-     description as the interface comment. With none, pin the interface
-     yourself per its Planning step 4 and list it in the hand back. A
-     pinned interface that turns out wrong takes the blocked path (step 5)
-     with what broke, so the fix lands in the spec.
-   - Use `mattpocock-skills:tdd` where it fits. Tests go through the
-     interfaces `## Interface` lists for them; with no `## Interface`,
-     pick them yourself and list them in the hand back. Cover every
-     scenario in `## Tests`, with as many tests as it takes, and add
-     whatever else the implementation needs. A scenario that turns out
-     wrong takes the blocked path when fixing it changes a requirement;
-     otherwise refine or drop it and return it for the PR's Notes, with
-     why. Each test pins
-     one behaviour a caller relies on, using the real implementation
-     behind the interface; a fake stands in only for a dependency the
-     module doesn't own (network, vendor, clock). Domain terms live in
-     `CONTEXT.md`.
-   - Typecheck and run single test files regularly; full suite once at the end.
-   - Done when lint, typecheck and the full suite are green and each
-     requirement ID in the issue has a behaviour test through the
-     interface that fails without the change.
-   - Leave reviews to the coordinator.
-   - Commit to the branch (per `commit`).
-4. **Hand back** - return the branch name and worktree path with the branch
-   committed and unpushed, plus any refined or dropped scenarios.
-5. **Blocked/failure** - follow the `issue` skill's blocked path: post the
-   blocked comment, swap **working -> blocked**, stop this subagent without
-   touching the others.
+A subagent has no memory of this conversation, so its prompt is this,
+filled in, with absolute paths:
+
+```
+Read <this skill's directory>/SUBAGENT.md and follow it.
+Issue: #<N> in <owner/repo>
+Repo: <path to the main checkout>
+```
+
+In a stack, add:
+
+```
+Intent: #<intent>, layer <n>/<m>
+Stack worktree: <path>
+Top branch: <branch>
+```
+
+Anything else the subagent needs that the issue doesn't say goes on a
+final `Context:` line. The pipeline itself stays in the file.
 
 ## Review gate
 
@@ -87,25 +65,20 @@ Runs in the coordinator on the local branch, before anything is pushed.
    They spawn their own subagents, which a subagent can't, so they run
    here.
 2. No findings and no flags: go to **Ship**. Otherwise spawn one fresh
-   subagent in the branch's worktree, given every finding and flag
-   verbatim (it has no memory of the review). It fixes each code-review
-   and security finding, each unmet requirement ID, and each
-   **mechanical** flag, or dismisses one only if it's wrong, inside the
-   modules the branch already touches. It conforms the code to any
-   `## Interface` mismatch; one it can't conform without changing the
-   interface is returned as blocking. It leaves **judgement** flags as
-   they are. A finding and a flag on the
-   same problem are fixed once. When the two conflict, a correctness bug
-   wins, and a cleanup that would break the `## Interface` or trip a red
-   flag is dismissed with that conflict as its reason. A finding outside
-   the touched modules is returned for the PR's Notes. It reruns the
-   tests and commits per `commit`; tests it can't get green are returned
-   as blocking.
-3. The subagent returns the dismissed findings with reasons, the
-   judgement flags, and anything blocking. Blocking takes the issue's
-   blocked path (`issue` skill) instead of **Ship**. Dismissals go in the coordinator's final report only;
-   one that reflects a real design decision also goes in the PR body's
-   Notes, written as a statement about the design.
+   subagent with this prompt, filled in:
+
+   ```
+   Read <this skill's directory>/FIX.md and follow it.
+   Issue: #<N> in <owner/repo>
+   Worktree: <path>
+   Branch: <branch>, base <base>
+   Findings and flags, verbatim:
+   <every finding and flag>
+   ```
+3. Blocking takes the issue's blocked path (`issue` skill) instead of
+   **Ship**. Dismissals go in the coordinator's final report only; one
+   that reflects a real design decision also goes in the PR body's Notes
+   (per `pr`), written as a statement about the design.
 
 ## Ship
 
@@ -139,20 +112,11 @@ lines, kept as `spec` set it.
    slice.
 2. One fresh subagent per sub-issue, **sequentially** - wait for each
    before spawning the next, so every agent starts with a clean context
-   and the previous layers already in its base branch. Each runs the
-   per-issue pipeline with these changes:
-   - **Prompt** - the coordinator gives it the stack's worktree path and
-     the current top branch.
-   - **Claim** - the sub-issue counts as explicitly named: add
-     **working**.
-   - **Worktree** - all reuse the stack's worktree and run
-     `gh stack add <branch>` (per `gh-stack`). With no decisions branch,
-     the first creates that worktree per `worktree` and runs
-     `gh stack init <branch>` instead.
-   - **Blocked** - including "the stack order is wrong" (needs something
-     from a later slice): blocked path, order as filed. Stop the stack and
-     take the intent **working -> blocked** with a blocked comment linking
-     the sub-issue; the fix belongs in the spec (`spec`'s re-spec path).
+   and the previous layers already in its base branch. Each gets the
+   **Brief** with its stack lines. When one comes back blocked, stop the
+   stack and take the intent **working -> blocked** with a blocked
+   comment linking the sub-issue; the fix belongs in the spec (`spec`'s
+   re-spec path).
 3. **Per layer** - when a layer hands back, the coordinator runs the
    **Review gate** on it, then ships it in place of **Ship**'s step 1:
    1. `gh stack submit --auto`. If it fails because the repo has no
@@ -181,5 +145,6 @@ lines, kept as `spec` set it.
    order plus findings fixed and dismissed.
 
 This skill only sequences `issue`, `worktree`, `pr`, `commit`, `gh-stack`,
-`code-review`, `software-design` and `mattpocock-skills:tdd` - it doesn't
-restate their rules, follow them directly.
+`code-review`, `security-review`, `software-design`, `data-models` and
+`mattpocock-skills:tdd` - it doesn't restate their rules, follow them
+directly.
