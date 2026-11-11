@@ -1,6 +1,6 @@
 ---
 name: software-design
-description: Minimise complexity with deep modules, information hiding and the book's red flags (A Philosophy of Software Design). Use when planning a new or changed interface, adding a feature, module, or file, deciding where code belongs, calling across modules, or reviewing a change for complexity.
+description: Minimise complexity with deep modules, information hiding and the red flags from A Philosophy of Software Design. Use when planning a new or changed interface, adding a feature, module, or file, deciding where code belongs, calling across modules, or reviewing a change for complexity.
 ---
 
 # Software design
@@ -17,9 +17,9 @@ from dependencies and obscurity. It grows one tactical shortcut at a time, so
 work strategically: every change keeps each module's interface or deliberately
 moves it, and spends a little extra on design to do so.
 
-Vocabulary (depth, adapter, leverage, locality, deletion test) lives in
-`mattpocock-skills:codebase-design`. This skill is the layout, the rules
-that keep it, and the [red flags](RED-FLAGS.md) that show where it slipped.
+This skill is the principles and the [red flags](RED-FLAGS.md) that show
+where they slipped. It prescribes no layout: the repo's own structure and
+names stay.
 
 Pick the branch for the work in hand:
 
@@ -46,7 +46,7 @@ interface and leaves the implementation to the builder.
    produces variations of it, so the designs come from separate subagents:
    - Write a short technical brief: the constraints any interface must
      meet, the dependencies behind the interface, the files involved, and the
-     `CONTEXT.md` terms to name things by.
+     glossary terms to name things by.
    - Spawn 3+ `general-purpose` subagents in parallel, one message, each
      with the brief and a different constraint: minimise the interface
      (1–3 entry points); maximise flexibility; make the most common call
@@ -91,33 +91,30 @@ rather than being redrawn mid-build.
 3. **Reuse the public interface.** Call the owner's public functions and
    types. When the need is an internal of another module, pick one move from
    [Sharing](#sharing) and say which in the reply.
-4. **Place the code** by the [Placement](#placement) rules and the
-   [Module structure](#module-structure).
-5. **Check the change** against the [Self-check](#self-check) and every
-   flag in [RED-FLAGS.md](RED-FLAGS.md) and [NAMING.md](NAMING.md). Every question answered and every
-   flag checked; a hit is fixed or called out in the reply.
-
-The change touches background jobs, events, persistence, transactions or a
-capability module →
-also read [PATTERNS.md](PATTERNS.md).
+4. **Place the code** by the [Placement](#placement) rules.
+5. **Check the change** against every flag in [RED-FLAGS.md](RED-FLAGS.md)
+   and [NAMING.md](NAMING.md). Done when every flag is checked; a hit is
+   fixed or called out in the reply.
 
 ## Placement
 
 - **Split by knowledge.** A module owns one set of decisions and the data
   behind them, and holds everything that changes when those decisions do:
   send, edit and delete share what a message is, so they live in one
-  `messages` module. Each shape has one owner; every other place imports or
-  generates it.
-- **Depth is measured at the public surface.** Inside, layer as much as
-  helps (rules → persistence); only what callers import counts.
+  module. Each shape has one owner; every other place imports or generates
+  it.
+- **One public entry.** Callers import a module through its public entry
+  (`__init__.py`, `index.ts`, or the repo's equivalent); everything else
+  is private and free to change.
+- **Depth is measured at the public interface.** Inside, layer as much as
+  helps; only what callers import counts.
 - **Intent-shaped interfaces.** Public functions name what the caller wants
   (`add_member()`, `send()`, `rename()`) and enforce the module's own rules,
   so every caller gets them for free.
 - **Make the safe path the only path.** Security and correctness inputs
-  (`scope`, `ctx`, the acting user) are required parameters.
-- **Define errors out of existence.** Idempotent writes (a `client_id`),
-  no-op deletes, leases and `greatest()` updates turn would-be errors into
-  normal outcomes.
+  (the scope, the acting user) are required parameters.
+- **Define errors out of existence.** Idempotent writes and no-op deletes
+  turn would-be errors into normal outcomes.
 - **Somewhat general-purpose.** Shape each signature for the general
   mechanism, not today's one use (`insert(pos, text)`, not `backspace()`).
   Ask what the simplest interface covering every current need is, how many
@@ -130,98 +127,28 @@ also read [PATTERNS.md](PATTERNS.md).
   simple.
 - **Every wrapper adds rules or orchestration.** When a function would only
   forward, callers use the inner one directly.
-- **Ready-made instances.** A class-based module exposes one built instance
-  (`Messages.default()`) and keeps its wiring private, since constructor
-  args are interface too.
 - **Abstractions follow real variation.** A protocol, factory or event arrives
   with the second implementation or consumer; until then the module is one
   plain implementation.
-
-### Layers
-
-Dependencies point down and the import graph stays a DAG.
-
-```
-Adapters      translate only        HTTP routes, CLI, worker entrypoints, frontend data layer
-Domain        own data + intent     one module per area of knowledge
-Capabilities  content-agnostic      attachments, search, tools
-Platform      domain-free           db, queue, events, storage, llm
-Contracts     shapes only           event and wire types shared across modules
-```
-
-- Platform depends only on platform and third-party code.
-- An adapter makes one module call per write. Composing reads for one screen
-  is presentation and fits there; write workflows live in the owning
-  module, or a small use-case module (`onboarding.register()`) when no
-  module owns them.
-- A worker is one more adapter into the same modules.
-- A capability takes opaque refs (`"message:8f3a"`) and stores them as-is.
-  Sources call it and it depends on none of them; a caller resolves a ref
-  through the owning module, which re-checks permissions. Scope is applied
-  inside the query.
-- Each layer hides distinct knowledge (HTTP, transport, broker).
-
-## Module structure
-
-Each module is a directory with a public face and a private inside.
-
-- **Public**: one entry file (`__init__.py`, `index.ts`) exposing the
-  module's functions, plus the frozen value types that cross the interface.
-  This is everything callers import.
-- **Private**: everything else, under plain names. The interface comes from
-  the entry file and the [Enforcement](#enforcement) contract, not from
-  filenames; when a visible marker helps, put internals in one `_internal/`
-  subpackage. A repo already using `_name.py` keeps it. Typically the rules and orchestration
-  that own the transaction, persistence that returns domain types, handlers
-  for jobs and events, and one file per piece of module knowledge.
-- Every module follows the same layout and names, so a reader who knows one
-  knows where things are in all of them. A repo that already has a layout
-  keeps it; a new one picks names once and reuses them.
-- Each file holds one piece of knowledge and is named for it (`rank.py`,
-  `provider.py`). It appears when that knowledge does and grows into a
-  subpackage of the same name.
-- The module's tables or collections carry its prefix (`msg_`, `doc_`), and
-  only that module queries them.
-- Vendors (LLM, STT, S3, MCP) sit behind one private adapter or a platform
-  module, so a vendor swap is one file.
-- Tests exercise the public interface.
-- Contracts have one source of truth, generated outward: server schema →
-  OpenAPI → client types.
+- **Dependencies point one way.** The import graph stays acyclic, and
+  general-purpose modules never import the modules that use them.
+- **Callers see domain types.** Database rows, vendor payloads and
+  transport shapes are converted at the interface of the module that owns
+  them, so a vendor or schema swap stays inside it.
+- **Rules live below the entry points.** A route, CLI command or worker
+  translates its input and makes one call; the rule sits in the owning
+  module, where every entry point reuses it.
+- **Tests exercise the public interface.**
 
 ## Sharing
 
-Cross-module code goes through public functions and public frozen types.
-When another module's internal looks useful, choose one:
+Cross-module code goes through public functions and public types. When
+another module's internal looks useful, choose one:
 
 - **Promote** it to the owner's public interface, deliberately named.
-- **Push it down** to platform when it is domain-free.
+- **Push it down** to a lower-level shared module when it carries no
+  knowledge of its callers.
 - **Merge** the two modules when they share the knowledge anyway.
-
-## Enforcement
-
-For a new repo, or one that adopts this layout, add the checks that keep it:
-
-- Python: `import-linter` contracts that allow cross-module imports only
-  from a module's package root (`from app.messages import send`) and keep
-  platform independent of modules.
-- TypeScript: `eslint-plugin-boundaries`, with features importing only the
-  data module and UI components.
-
-## Self-check
-
-Layout checks for this skill's module structure; the book's red flags live
-in [RED-FLAGS.md](RED-FLAGS.md). Each question names what to look for and
-the fix.
-
-1. **Logic in an adapter**: could a worker or CLI reuse each rule? Move
-   rules from routes into the owning module.
-2. **Cross-module imports**: is the import graph a DAG with only public imports
-   across modules? Promote, push down or merge per [Sharing](#sharing).
-3. **Optional safety**: are scope and ctx required and handlers idempotent?
-4. **Leaked internals**: do callers see only domain types? Convert ORM rows,
-   column names and queue fields at the interface.
-5. **Classitis**: does every protocol, factory and event have a second
-   implementation or consumer behind it?
 
 ## Review
 
@@ -233,7 +160,7 @@ reasoning that produced it.
 2. **Dispatch** one `general-purpose` subagent with only the diff target,
    the repo path and this skill's directory. Leave out the builder's plan
    and reasoning; when the work has a spec issue, include its number. Tell
-   it to read `SKILL.md`, `RED-FLAGS.md` and `NAMING.md`, run the Self-check and every
+   it to read `SKILL.md`, `RED-FLAGS.md` and `NAMING.md`, run every
    flag against every changed module and its callers, and return each hit
    as: flag, `file:line`, mechanical or judgement, the fix. With a spec
    issue it also checks the code matches `## Interface` (a mismatch is a

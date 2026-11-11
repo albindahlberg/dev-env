@@ -56,7 +56,7 @@ trade-off. In `build` they are always surfaced, never fixed.
 - **Looks like**: a general mechanism with branches for one caller's case.
   Boolean flags that switch behaviour, `if kind == "invoice"` inside a
   storage or queue module, imports from a higher layer.
-- **Detect**: in lower-layer or capability modules, grep for caller domain
+- **Detect**: in general-purpose, lower-level modules, grep for caller domain
   terms, boolean parameters and upward imports.
 - **Fix**: keep the general mechanism down and push the special case up
   into the caller, or split it into its own module on top.
