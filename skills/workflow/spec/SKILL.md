@@ -15,8 +15,9 @@ so a fresh agent with only the sub-issue can build it without making a
 design decision, and leaves each module's implementation to `build`.
 
 1. **Research** - before asking anything, read the intent
-   (`gh issue view N --comments`), `CLAUDE.md` / `AGENTS.md`, `CONTEXT.md`,
-   existing ADRs, and the code the change touches (sub-agents for broad
+   (`gh issue view N --comments`), `CLAUDE.md` / `AGENTS.md`, the glossary
+   (`GLOSSARY.md`, or the glossary file the repo already uses, such as
+   `CONTEXT.md`), existing ADRs, and the code the change touches (sub-agents for broad
    sweeps). Run `software-design`'s Planning steps 1–2 (owner, ground
    check). List, for the grill:
    - **Flagged concerns** - conflicts with the intent's constraints, repo
@@ -34,7 +35,7 @@ design decision, and leaves each module's implementation to `build`.
 
 2. **Grill** - first create the decisions worktree:
    `git worktree add <dir> -b docs/intent-N-decisions`, N the intent's
-   issue number, `<dir>` named per `worktree`. Every ADR and `CONTEXT.md`
+   issue number, `<dir>` placed and named per `worktree`. Every ADR and glossary
    edit from here on is written in that worktree. Then call the Skill tool for `skewer-w-docs` (grilling via the
    AskUserQuestion picker + ADRs and glossary). Seed the design tree
    strategic first, so the shape is settled before the work is cut up:
@@ -65,8 +66,7 @@ design decision, and leaves each module's implementation to `build`.
    resolved decision that meets domain-modeling's ADR bar as an ADR, and
    rejected alternatives below that bar in the slice's `## Decisions`,
    each with the tradeoff that ruled it out; new terms go in
-   `CONTEXT.md` (domain-modeling's glossary format, but always this
-   file), as you go, not at the end. Any answer that changes the
+   the glossary (domain-modeling's format), as you go, not at the end. Any answer that changes the
    intent (new problem, dropped or narrowed outcome) is a scope change:
    edit it into the intent body per the `issue` skill.
 
@@ -108,8 +108,7 @@ design decision, and leaves each module's implementation to `build`.
    sequence for data flow, the slice stack in order, a table for compared
    options. Put the whole draft spec in the `show-me` Markdown preview,
    the same Markdown and Mermaid the issue bodies will use (GitHub
-   renders it); in chat give only the slice stack, rendered per
-   `show-me`. Ask for an explicit yes, and on feedback edit the draft,
+   renders it); in chat give only the slice stack, as a list. Ask for an explicit yes, and on feedback edit the draft,
    re-run the preview and ask again.
 
 4. **File** - one sub-issue per slice, in stack order:
@@ -129,7 +128,7 @@ design decision, and leaves each module's implementation to `build`.
    ## Out of scope     <!-- drop if empty -->
    ```
 
-   In the decisions worktree, commit the ADR / `CONTEXT.md` changes (per
+   In the decisions worktree, commit the ADR and glossary changes (per
    `commit`), push the branch, then `git worktree remove <dir>` so `build`
    can check it out. That branch is the bottom layer of the stack: add
    `Decisions: docs/intent-N-decisions` and a `## Requirements` list

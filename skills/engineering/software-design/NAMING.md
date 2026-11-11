@@ -12,7 +12,7 @@ functions, exceptions, fields that cross a module interface.
 1. **Concepts.** List what a caller who sees only the call site must learn
    from the name.
 2. **Words.** Take each concept's word from the repo's glossary
-   (`CONTEXT.md` or `GLOSSARY.md`) when it has one, else the word the domain
+   (`GLOSSARY.md`, or the file the repo already uses) when it has one, else the word the domain
    uses. A glossary term that fits only by stretching is a
    [weak term](#weak-term--judgement).
 3. **Collisions.** `git grep -iw <word>` and the glossary for each word.
