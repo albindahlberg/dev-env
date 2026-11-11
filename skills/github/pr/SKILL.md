@@ -49,6 +49,11 @@ Visuals, three steps:
    Read the edges from the imports and calls in the diff and the touched
    modules, so the graph shows the code as it is.
 
+Notes: when the caller hands over open design questions, changed test
+scenarios or findings outside the change (as `build` does), list them
+under a `## Notes` heading at the end of the body, or in the template's
+closest section when there is a template. No Notes heading without them.
+
 Rules:
 - no empty sections; drop headings that have nothing to say
 - link issues with `Closes #123`
