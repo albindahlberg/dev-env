@@ -32,13 +32,23 @@ If type unclear, ask once, don't guess `chore`.
 
 ## Creating it
 
-Main session (not in a subagent): use `EnterWorktree` with the name above.
+Every worktree lives in `~/.herdr/worktrees/<repo>/<name>`, `<repo>` the
+repository's directory name and `<name>` the worktree name above. herdr
+lists and opens them from there, and nothing lands inside the repo, where
+a worktree under `.claude/` shows every project skill twice.
 
-Inside a subagent: `EnterWorktree` refuses — it won't mutate a cwd-pinned
-subagent's working directory. Use `git worktree add <dir> -b <branch>`
-directly, same naming as above.
+New branch: `git worktree add ~/.herdr/worktrees/<repo>/<name> -b <branch>`.
 
-Existing branch (checking out work that's already there, e.g. a pushed
-branch): `git fetch origin <branch>`, then `git worktree add <dir> <branch>`
-without `-b`. It fails if another worktree holds the branch; remove that one
-first.
+Existing branch (work that's already there, e.g. a pushed branch):
+`git fetch origin <branch>`, then the same `git worktree add` with
+`<branch>` in place of `-b <branch>`. It fails if another worktree holds
+the branch; remove that one first.
+
+Main session that will do the work itself: after creating it, call
+`EnterWorktree` with `path` set to the new directory. A coordinator that
+hands the worktree to subagents stays where it is. Calling it with `name` creates the worktree under
+`.claude/worktrees/` instead.
+
+Subagent: work in the directory by path (`git -C <dir>`, absolute file
+paths). `EnterWorktree` only enters worktrees under `.claude/worktrees/`
+from a subagent.
