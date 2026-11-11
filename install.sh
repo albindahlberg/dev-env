@@ -127,7 +127,6 @@ install_packages() {
   have claude || run bash -c 'curl -fsSL https://claude.ai/install.sh | bash'
   have herdr  || run bash -c 'curl -fsSL https://herdr.dev/install.sh | sh'
   have pi     || { have npm && run npm install -g @earendil-works/pi-coding-agent; }
-  have mermaid-ascii || run bash -c 'mkdir -p ~/.local/bin && curl -fsSL "https://github.com/AlexanderGrooff/mermaid-ascii/releases/latest/download/mermaid-ascii_$(uname -s)_$(uname -m).tar.gz" | tar -xz -C ~/.local/bin mermaid-ascii'
   [ -d "$HOME/.tmux/plugins/tpm" ] || run git clone --depth 1 https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
 }
 

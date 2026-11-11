@@ -41,9 +41,9 @@ investment the change deserves.
    budget, cut mechanism and solution detail first. Call the Skill tool for
    `show-me` and add a visual wherever it reads faster than prose: today's
    workflow, the users and systems involved, where the pain sits, or the
-   user's experience before and after. Visuals show the problem. In chat,
-   render per `show-me`; in the issue body use the Mermaid source (GitHub
-   renders it). Show it and let the originator correct anything misread;
+   user's experience before and after. Visuals show the problem. Show the draft in
+   the `show-me` preview, the same Markdown and Mermaid the issue body
+   will use, and let the originator correct anything misread;
    wait for an explicit yes.
 
 3. **File** - per the `issue` skill's writing rules (duplicate search),

@@ -95,9 +95,8 @@ smallest fitting shape:
 - **Call or file tree, or a `diff` on one** - where a change lands.
 - **Code block** - exact error text, command, or minimal snippet. Trim logs.
 
-Skip it when one or two sentences say the same thing. In the issue body,
-write Mermaid source (GitHub renders it); in chat drafts, render per
-`show-me`. Inline Markdown only: no HTML files or previews in an issue.
+Skip it when one or two sentences say the same thing. The issue body
+takes Mermaid source (GitHub renders it). Inline Markdown only: no HTML files or previews in an issue.
 
 Rules:
 - no empty sections; drop headings with nothing to say
