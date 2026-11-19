@@ -97,6 +97,9 @@ Runs in the coordinator, in the branch's worktree, after the Review gate.
    the review.
 2. Swap the issue label **working -> review** (`issue` skill), comment on
    the issue with the PR link.
+3. Edit each refined or dropped scenario into the issue's `## Tests` per
+   the `issue` skill's scope changes, linking the PR as the why, so the
+   spec states what shipped.
 
 ## Stack mode (intent)
 
@@ -134,7 +137,7 @@ lines, kept as `spec` set it.
       the bottom PR's body. The stack merges in one go and GitHub only
       reads closing keywords from the PR into the default branch, so the
       layer's own `Closes` never fires.
-   4. **Ship**'s step 2 for the sub-issue.
+   4. **Ship**'s steps 2–3 for the sub-issue.
 
    The next layer starts only after, so each layer builds on
    reviewed code.
