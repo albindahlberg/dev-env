@@ -7,7 +7,7 @@ Each entry says what it looks like, how to detect it, the fix, and when it
 is fine.
 
 **Mechanical** flags have one obvious fix that changes no design decision;
-apply it. **Judgement** flags move an interface or a responsibility; fix
+apply it. **Judgement** flags move an interface or a concern; fix
 them when the right shape is clear, otherwise surface them with the
 trade-off. In `build` they are always surfaced, never fixed.
 
@@ -18,12 +18,14 @@ trade-off. In `build` they are always surfaced, never fixed.
 - **Looks like**: an interface about as complex as its implementation.
   Many small classes or functions that each hide little; callers do the
   real work by combining them.
-- **Detect**: list what the module's entry file exports. For each export,
-  name the decision it hides from callers. An empty answer is a hit.
+- **Detect**: run the deletion test from [SKILL.md](SKILL.md) on each
+  module and abstraction. List what the module's entry file exports; for
+  each export, name the work it does for callers beyond what they pass in. An empty answer
+  is a hit.
 - **Fix**: merge into the caller or a neighbour so one interface hides
   more. Prefer fewer, more powerful functions.
 - **Fine when**: it is an adapter at the edge translating a vendor or
-  transport, where the translation is the hidden decision.
+  transport, where the translation is the concern.
 
 ### Overexposure · mechanical
 
@@ -61,18 +63,21 @@ trade-off. In `build` they are always surfaced, never fixed.
 - **Fix**: keep the general mechanism down and push the special case up
   into the caller, or split it into its own module on top.
 - **Fine when**: the "special" case is actually part of the module's own
-  knowledge.
+  concern.
 
-## Knowledge
+## Locality
 
 ### Information leakage · judgement
 
-- **Looks like**: one design decision (a file format, a protocol, a key
-  layout, a magic constant, a call order) known in two or more modules, so
-  changing it changes all of them.
-- **Detect**: grep distinctive literals, keys and format strings across
+- **Looks like**: one concern's details (a file format, a protocol, a
+  key layout, a magic constant, a call order) in two or more modules, so
+  changing it changes all of them. Also: a rule that belongs to a module
+  written into its caller, such as a route or CLI command enforcing a limit.
+- **Detect**: run the change test from [SKILL.md](SKILL.md) on each
+  touched module; a likely change that touches a caller is a hit. Grep distinctive literals,
+  keys and format strings across
   modules. Check co-change: files that keep changing in the same commits
-  share knowledge, whatever the import graph says:
+  share a concern, whatever the import graph says:
 
   ```sh
   git log --format= --name-only -n 300 | awk NF | sort | uniq -c | sort -rn | head
@@ -81,7 +86,7 @@ trade-off. In `build` they are always surfaced, never fixed.
 
   The first shows hot files; the second shows what changes alongside one of
   them. Pairs across modules that keep showing up are a hit.
-- **Fix**: give the decision one owner and have the others call it, or
+- **Fix**: give the concern one owner and have the others call it, or
   merge the modules.
 - **Fine when**: the shared thing is a published contract generated from
   one source (schema → OpenAPI → client types).
@@ -92,17 +97,17 @@ trade-off. In `build` they are always surfaced, never fixed.
   write) where two stages know the same thing, like the format read in one
   and written in another.
 - **Detect**: for modules named after steps, ask what each one knows. A
-  piece of knowledge in more than one stage is a hit.
-- **Fix**: split by knowledge: one module owns the format and does both
+  detail known in more than one stage is a hit.
+- **Fix**: split by concern: one module owns the format and does both
   reading and writing.
-- **Fine when**: each stage hides distinct knowledge. Ordering alone is
-  not the problem; shared knowledge is.
+- **Fine when**: each stage owns a distinct concern. Ordering alone is
+  not the problem; a shared detail is.
 
 ### Repetition · mechanical
 
 - **Looks like**: the same non-trivial code in several places.
 - **Detect**: grep a distinctive line of each new block across the repo.
-- **Fix**: move it to the module that owns the knowledge and call it.
+- **Fix**: move it to the owner of the concern and call it.
   When copies have drifted apart, decide which one is right first.
 - **Fine when**: the copies only look alike and will change for different
   reasons.

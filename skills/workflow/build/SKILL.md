@@ -80,6 +80,8 @@ Runs in the coordinator on the local branch, before anything is pushed.
    Findings and flags, verbatim:
    <every finding and flag>
    ```
+   Boundary-lint proposals skip FIX; they go in the coordinator's final
+   report as questions for the user.
 3. Blocking takes the issue's blocked path (`issue` skill) instead of
    **Ship**. Dismissals go in the coordinator's final report only; one
    that reflects a real design decision also goes in the PR body's Notes

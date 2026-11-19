@@ -1,6 +1,6 @@
 ---
 name: spec
-description: 'Turn an intent issue into spec sub-issues: read the intent and the codebase, grill the user on flagged concerns and open design decisions (recording ADRs and glossary terms), then write the spec and file each shippable slice as a sub-issue ready for `build`. Stage 2 (Design) of the AI-native SDLC. Trigger: "spec", "spec #12", "write the spec for", or /spec.'
+description: 'Turn an intent issue into spec sub-issues: read the intent and the codebase, grill the user on flagged risks and open design decisions (recording ADRs and glossary terms), then write the spec and file each shippable slice as a sub-issue ready for `build`. Stage 2 (Design) of the AI-native SDLC. Trigger: "spec", "spec #12", "write the spec for", or /spec.'
 ---
 
 # Spec
@@ -20,10 +20,12 @@ design decision, and leaves each module's implementation to `build`.
    `CONTEXT.md`), existing ADRs, and the code the change touches (sub-agents for broad
    sweeps). Run `software-design`'s Planning steps 1–2 (owner, ground
    check). List, for the grill:
-   - **Flagged concerns** - conflicts with the intent's constraints, repo
+   - **Flagged risks** - conflicts with the intent's constraints, repo
      conventions, security, or existing ADRs; plus risky or ambiguous calls.
-   - **Design health** - each touched module judged fit to build on, or
-     the prefactor it needs first, with the red flags and co-change evidence.
+   - **Design health** - each touched module's concern in one sentence
+     and its change and deletion tests (`software-design`), then the module
+     judged fit to build on, or the prefactor it needs first, with the red
+     flags and co-change evidence.
    - **Open decisions** - which module interfaces the change adds or
      changes, which module owns each, data flow, how to slice it. Each
      with the real options, the tradeoff between them (what each buys
@@ -39,7 +41,7 @@ design decision, and leaves each module's implementation to `build`.
    edit from here on is written in that worktree. Then call the Skill tool for `skewer-w-docs` (grilling via the
    AskUserQuestion picker + ADRs and glossary). Seed the design tree
    strategic first, so the shape is settled before the work is cut up:
-   1. **Flagged concerns.**
+   1. **Flagged risks.**
    2. **Design health** - per touched module: build on it as is, or a
       prefactor slice first.
    3. **Investment** - how much of this stack improves the design versus
@@ -78,8 +80,10 @@ design decision, and leaves each module's implementation to `build`.
      intent's open questions is answered here or carried forward as one.
    - **Design** - as decided in the grill, naming the tradeoffs it
      accepts.
-   - **Interface** - per slice, the owning module, its pinned interface and the
-     interfaces tests go through, from
+   - **Interface** - per slice, the owning module, the concern it
+     owns and its allowed importers (including modules the slice changes
+     only inside), its
+     pinned interface and the interfaces tests go through, from
      `software-design`'s Planning step 4.
    - **Tests** - per slice, the scenarios that matter most, grouped
      under the interfaces **Interface** names for tests, so a reviewer
@@ -123,10 +127,10 @@ design decision, and leaves each module's implementation to `build`.
 
    ## Requirements     <!-- the R-IDs this slice delivers, verbatim -->
    ## Design
-   ## Interface        <!-- the pinned interface, per software-design's Planning step 4 -->
+   ## Interface        <!-- owned concern, allowed importers and pinned interface, per software-design's Planning step 4 -->
    ## Tests          <!-- key scenarios per interface, with R-IDs; not exhaustive -->
    ## Open questions   <!-- carried forward; drop if empty -->
-   ## Decisions        <!-- ADR links, resolved concerns -->
+   ## Decisions        <!-- ADR links, resolved risks -->
    ## Out of scope     <!-- drop if empty -->
    ```
 

@@ -38,7 +38,7 @@ Done when every new public name has passed every flag below.
 - **Exceptions**: what went wrong, from the caller's side, with the
   language's suffix (`Error` in Python, `Exception` in C#/Java). One per
   failure a caller handles differently.
-- **Modules and files**: the one piece of knowledge they hold (`rank.py`).
+- **Modules and files**: the one concern they own (`rank.py`).
 
 ## Flags
 
