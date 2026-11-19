@@ -113,7 +113,9 @@ design decision, and leaves each module's implementation to `build`.
 
 4. **File** - one sub-issue per slice, in stack order:
    `gh issue create --parent N`, writing per the `issue` skill, title
-   the slice with no prefix, label `spec`, body:
+   the slice with no prefix as an imperative naming what works after it
+   merges, with the component where that helps: `Add auth to the
+   booking API`, not `Add Keycloak config`. Label `spec`, body:
 
    ```md
    Intent: #N
