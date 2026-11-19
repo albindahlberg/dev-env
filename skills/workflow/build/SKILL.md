@@ -57,13 +57,18 @@ final `Context:` line. The pipeline itself stays in the file.
 
 Runs in the coordinator on the local branch, before anything is pushed.
 
-1. Run `code-review <branch>` and `software-design`'s Review on the branch's
-   diff against its base (in a stack, the layer below, so each review
-   covers this layer only), giving the Review the issue number. When the
-   diff touches auth, permissions, secrets, user data or external input,
-   also run the built-in `security-review` from the branch's worktree.
-   They spawn their own subagents, which a subagent can't, so they run
-   here.
+1. Run these on the branch's diff against its base (in a stack, the layer
+   below, so each review covers this layer only):
+   - the built-in `code-review <branch>`, without `--fix`, for bugs;
+   - `mattpocock-skills:code-review` with the base as its fixed point and
+     the issue as its spec;
+   - `software-design`'s Review, given the issue number.
+
+   When the diff touches auth, permissions, secrets, user data or external
+   input, also run the built-in `security-review` from the branch's
+   worktree. Give every review whatever docs the repo has on how its code
+   is written or reviewed, as required sources. They spawn their own subagents, which a subagent
+   can't, so they run here.
 2. No findings and no flags: go to **Ship**. Otherwise spawn one fresh
    subagent with this prompt, filled in:
 
@@ -145,6 +150,6 @@ lines, kept as `spec` set it.
    order plus findings fixed and dismissed.
 
 This skill only sequences `issue`, `worktree`, `pr`, `commit`, `gh-stack`,
-`code-review`, `security-review`, `software-design`, `data-models` and
-`mattpocock-skills:tdd` - it doesn't restate their rules, follow them
+`code-review`, `mattpocock-skills:code-review`, `security-review`,
+`software-design`, `data-models` and `mattpocock-skills:tdd` - it doesn't restate their rules, follow them
 directly.
