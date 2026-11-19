@@ -24,7 +24,8 @@ Before writing the body, look for a PR template in the project root:
 
 - Found: fill it in, keep its headings and order, don't invent sections.
   Delete HTML comments and placeholder text. Tick only checkboxes that are true.
-  The concise/table/diagram rules below apply *inside* its sections.
+  A template fixes the headings, not the content: run the Visuals steps as
+  usual and put each visual in the section it explains.
 - Not found: no fixed headings; shape the body to what this change needs.
 - Title prefix rule always applies, template or not.
 
@@ -34,9 +35,10 @@ No filler, no restating the diff line by line, no marketing tone.
 Visuals, three steps:
 1. Always call the Skill tool for `show-me` before drafting the body, even
    when you expect no visual.
-2. Then decide. Required when the change alters a flow, schema, data shape
-   or order of steps. Otherwise add one only where the reviewer would have
-   to rebuild a picture from prose, and skip it if prose is clearer. Pick the
+2. Then decide. Prefer a visual over prose wherever it delivers the
+   information faster. Required when the change alters a flow, schema, data
+   shape or order of steps; otherwise use one wherever the reviewer would
+   have to rebuild a picture from prose. Pick the
    smallest view (pseudocode, call tree, component tree, file tree, Mermaid,
    `diff` of shape, table for before/after or many options). Reuse a visual
    from the linked issue or spec when one fits. Inline Markdown only; no
