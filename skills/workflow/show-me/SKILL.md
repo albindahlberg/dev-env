@@ -57,7 +57,7 @@ submitForm                     src/
 Pipe the Markdown into `preview.sh`, which renders it with mdkite.nvim, from this skill's base directory. Run it every time, including for updates: it rewrites this session's file, starts this session's server if needed, and opens a browser tab. Each session has its own file and port, so parallel agents never overwrite each other.
 
 ```
-Bash(cat <<'EOF' | <skill-dir>/preview.sh
+Bash(<skill-dir>/preview.sh <<'EOF'
 # Title
 ...
 EOF)
